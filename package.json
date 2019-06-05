@@ -1,0 +1,81 @@
+{
+  "name": "@waves/ride-cli",
+  "version": "1.0.0",
+  "author": {
+    "name": "Nazhmudin Baymurzaev",
+    "email": "n.baymurzaev@gmail.com"
+  },
+  "repository": "https://github.com/wavesplatform/ride-cli",
+  "scripts": {
+    "postpack": "rm -f oclif.manifest.json && rm -f tsconfig.tsbuildinfo",
+    "posttest": "tslint -p test -t stylish",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "homepage": "https://github.com/wavesplatform/ride-cli",
+  "keywords": [
+    "ride-cli"
+  ],
+  "bin": {
+    "ride-cli": "./bin/run"
+  },
+  "bugs": "https://github.com/wavesplatform/ride-cli/issues",
+  "dependencies": {
+    "@oclif/command": "^1.5.13",
+    "@oclif/config": "^1.13.0",
+    "@oclif/plugin-help": "^2.1.6",
+    "@types/bip39": "^2.4.2",
+    "@types/chai": "^4.1.7",
+    "@types/chai-as-promised": "^7.1.0",
+    "@types/inquirer": "^6.0.3",
+    "@types/json5": "0.0.30",
+    "@types/mocha": "^5.2.6",
+    "@types/nconf": "^0.10.0",
+    "@waves/ride-js": "^0.17.7",
+    "@waves/waves-transactions": "^3.10.0",
+    "bip39": "^3.0.2",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "cli-ux": "^5.2.1",
+    "inquirer": "^6.3.1",
+    "json5": "^2.1.0",
+    "mocha": "^6.1.4",
+    "nconf": "^0.10.0",
+    "recursive-readdir": "^2.2.2",
+    "tslib": "^1.9.3"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1.22.0",
+    "@oclif/test": "^1.2.4",
+    "@oclif/tslint": "^3.1.1",
+    "@types/node": "^10.14.7",
+    "globby": "^8.0.2",
+    "nyc": "^13.3.0",
+    "ts-node": "^8.0.3",
+    "tslint": "^5.15.0",
+    "typescript": "^3.4.3"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "oclif": {
+    "commands": "./lib/commands",
+    "hooks": {
+      "init": "./lib/hooks/init"
+    },
+    "bin": "ride-cli",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  },
+  "types": "lib/index.d.ts"
+}
