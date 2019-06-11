@@ -1,8 +1,9 @@
 interface IEnv {
+  accounts: Record<string, string>
   API_BASE: string
   CHAIN_ID: string
-  SEED?: string
-  accounts?: string[]
+  SEED: string
+  file: (name?: string) => Promise<string>
 }
 
 declare namespace NodeJS {
