@@ -111,14 +111,14 @@ class Config {
         const localConfigFilePath = this.getConfigPath('localConfig');
 
         if (config === 'default') {
-            fs.writeFileSync(localConfigFilePath, JSON.stringify(systemConfig));
+            fs.writeFileSync(localConfigFilePath, JSON.stringify(systemConfig, null, 4));
             nconf.file('localConfig', localConfigFilePath);
             const seeds = this.generateNSeeds(5);
             nconf.set('env:SEED', seeds[0]);
             // nconf.set('env:accounts', seeds);
             nconf.save('');
         } else {
-            fs.writeFileSync(localConfigFilePath, JSON.stringify(dockerNodeConfig));
+            fs.writeFileSync(localConfigFilePath, JSON.stringify(dockerNodeConfig, null, 4));
         }
     };
 

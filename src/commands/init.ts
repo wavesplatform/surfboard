@@ -47,7 +47,7 @@ export default class Init extends Command {
         if (workingDirContent.length) {
             this.warn(`
         This directory is non-empty. 
-        waves-dev-cli-config file and content of ride and test directory can be rewritten.
+        Configuration file and content of ride or test directories could be overwritten.
     `);
 
             let responses: any = await inquirer.prompt([{
