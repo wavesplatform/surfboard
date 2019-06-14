@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import * as envFuncs from './envFuncs';
+import * as envFuncs from '@waves/js-test-env';
 
 chai.use(chaiAsPromised);
 
@@ -19,7 +19,9 @@ const injectTestEnvironment = (context: any) => {
         return context.mocha;
     };
 
-    context = {...context, ...envFuncs};
+    // add all env functions
+    Object.entries(envFuncs).forEach(([name, val]) => context[name] = val);
+
 };
 
 export {

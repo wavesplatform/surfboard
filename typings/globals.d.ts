@@ -13,4 +13,4 @@ declare namespace NodeJS {
 }
 
 declare module 'recursive-readdir';
-declare module 'waves-dev-cli-config.json';
+declare module 'surfboard.config.json';

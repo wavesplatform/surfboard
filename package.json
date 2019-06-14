@@ -10,6 +10,8 @@
     "postpack": "rm -f oclif.manifest.json && rm -f tsconfig.tsbuildinfo",
     "posttest": "tslint -p test -t stylish",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "build": "npm run prepack && npm run postpack",
+    "prepublish": "npm run build",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md"
   },
@@ -32,6 +34,7 @@
     "@types/json5": "0.0.30",
     "@types/mocha": "^5.2.6",
     "@types/nconf": "^0.10.0",
+    "@waves/js-test-env": "^0.1.1",
     "@waves/ride-js": "^0.17.7",
     "@waves/waves-transactions": "^3.10.0",
     "bip39": "^3.0.2",

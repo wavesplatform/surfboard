@@ -63,8 +63,8 @@ class Config {
     const workingDirPath: string = process.cwd()!;
 
     const CONFIG_NAME_PATH_MAP: { [key: string]: string }  = {
-      globalConfig: `${this.oclifConfig.root}/lib/waves-dev-cli-config.json`,
-      localConfig: `${workingDirPath}/waves-dev-cli-config.json`
+      globalConfig: `${this.oclifConfig.root}/lib/surfboard.config.json`,
+      localConfig: `${workingDirPath}/surfboard.config.json`
     };
 
     return CONFIG_NAME_PATH_MAP[configName];

@@ -1,12 +1,12 @@
-waves-dev-cli
+Ride-cli
 =========
 
 
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/waves-dev-cli.svg)](https://npmjs.org/package/waves-dev-cli)
-[![Downloads/week](https://img.shields.io/npm/dw/waves-dev-cli.svg)](https://npmjs.org/package/waves-dev-cli)
-[![License](https://img.shields.io/npm/l/waves-dev-cli.svg)](https://github.com/waves/waves-dev-cli/blob/master/package.json)
+[![Version](https://img.shields.io/npm/v/@waves/ride-cli.svg)](https://npmjs.org/package/@waves/ride-cli)
+[![Downloads/week](https://img.shields.io/npm/dw/@waves/ride-cli.svg)](https://npmjs.org/package/@waves/ride-cli)
+[![License](https://img.shields.io/npm/l/@waves/ride-cli.svg)](https://github.com/wavesplatform/ride-cli/blob/master/package.json)
 
 <!-- toc -->
 * [Usage](#usage)
@@ -37,7 +37,7 @@ USAGE
 
 ## `ride-cli compile FILE`
 
-copile ride file
+compile ride file
 
 ```
 USAGE
