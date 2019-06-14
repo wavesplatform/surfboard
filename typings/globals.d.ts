@@ -1,8 +1,9 @@
 interface IEnv {
+  accounts: Record<string, string>
   API_BASE: string
   CHAIN_ID: string
-  SEED?: string
-  accounts?: string[]
+  SEED: string
+  file: (name?: string) => Promise<string>
 }
 
 declare namespace NodeJS {
@@ -12,4 +13,4 @@ declare namespace NodeJS {
 }
 
 declare module 'recursive-readdir';
-declare module 'waves-dev-cli-config.json';
+declare module 'surfboard.config.json';

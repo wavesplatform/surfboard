@@ -4,8 +4,8 @@ import { compile } from '@waves/ride-js';
 
 import TestRunner from '../services/testRunner';
 
-export default class Test extends Command {
-  static description = 'copile ride file';
+export default class Compile extends Command {
+  static description = 'compile ride file';
 
   static args = [
     {
@@ -26,7 +26,7 @@ export default class Test extends Command {
   }
 
   async run() {
-    const { args } = this.parse(Test);
+    const { args } = this.parse(Compile);
 
     const testRunnerService = TestRunner.getInstance();
   

@@ -5,146 +5,159 @@ import { IConfig as IOclifConfig } from '@oclif/config';
 import Mocha from 'mocha';
 
 interface IEnv {
-  API_BASE: string
-  CHAIN_ID: string
-  SEED?: string
-  accounts?: string[]
+    API_BASE: string
+    CHAIN_ID: string
+    SEED?: string
+    accounts?: string[]
 }
 
 interface IConfig {
-  ride_directory: string
-  test_directory: string
-  env: IEnv,
-  mocha: Mocha.MochaOptions
+    ride_directory: string
+    test_directory: string
+    env: IEnv,
+    mocha: Mocha.MochaOptions
 }
 
 const systemConfig: IConfig = {
-  ride_directory: 'ride',
-  test_directory: 'test',
-  env: {
-    API_BASE: 'https://testnodes.wavesnodes.com/',
-    CHAIN_ID: 'T',
-  },
-  mocha: {
-    timeout: 20000
-  }
+    ride_directory: 'ride',
+    test_directory: 'test',
+    env: {
+        API_BASE: 'https://testnodes.wavesnodes.com/',
+        CHAIN_ID: 'T',
+    },
+    mocha: {
+        timeout: 20000
+    }
+};
+
+const dockerNodeConfig: IConfig = {
+    ride_directory: 'ride',
+    test_directory: 'test',
+    env: {
+        API_BASE: 'http://localhost:6869/',
+        CHAIN_ID: 'R',
+        SEED: 'rich'
+    },
+    mocha: {
+        timeout: 20000
+    }
 };
 
 class Config {
-  private oclifConfig: IOclifConfig;
-  
-  private static instance: Config;
+    private oclifConfig: IOclifConfig;
 
-  private constructor(oclifConfig: IOclifConfig) {
-    this.oclifConfig = oclifConfig;
-    
-    const globalConfigFilePath = this.getConfigPath('globalConfig');
+    private static instance: Config;
 
-    if (!fs.existsSync(globalConfigFilePath)) {      
-      fs.writeFileSync(globalConfigFilePath, JSON.stringify(systemConfig));
-    }
-  }
+    private constructor(oclifConfig: IOclifConfig) {
+        this.oclifConfig = oclifConfig;
 
-  public static getInstance(oclifConfig?: IOclifConfig): Config {// singleton
-    if (oclifConfig && !Config.instance) {
-      Config.instance = new Config(oclifConfig);
+        const globalConfigFilePath = this.getConfigPath('globalConfig');
+
+        if (!fs.existsSync(globalConfigFilePath)) {
+            fs.writeFileSync(globalConfigFilePath, JSON.stringify(systemConfig));
+        }
     }
 
-    return Config.instance;
-  }
+    public static getInstance(oclifConfig?: IOclifConfig): Config {// singleton
+        if (oclifConfig && !Config.instance) {
+            Config.instance = new Config(oclifConfig);
+        }
 
-  private generateNSeeds = (N: number) => {
-    return Array(N).fill(N).map(() => {
-      return generateMnemonic();
-    });
-  };
+        return Config.instance;
+    }
 
-  getConfigPath = (configName: 'globalConfig' | 'localConfig') => {
-    const workingDirPath: string = process.cwd()!;
-
-    const CONFIG_NAME_PATH_MAP: { [key: string]: string }  = {
-      globalConfig: `${this.oclifConfig.root}/lib/waves-dev-cli-config.json`,
-      localConfig: `${workingDirPath}/waves-dev-cli-config.json`
+    private generateNSeeds = (N: number) => {
+        return Array(N).fill(N).map(() => {
+            return generateMnemonic();
+        });
     };
 
-    return CONFIG_NAME_PATH_MAP[configName];
-  }
+    getConfigPath = (configName: 'globalConfig' | 'localConfig') => {
+        const workingDirPath: string = process.cwd()!;
 
-  updateConfig = async (
-    configName: 'globalConfig' | 'localConfig',
-    key: string,
-    value: string
-  ) => {
-    const nconf = new Nconf();
+        const CONFIG_NAME_PATH_MAP: { [key: string]: string } = {
+            globalConfig: `${this.oclifConfig.root}/lib/surfboard.config.json`,
+            localConfig: `${workingDirPath}/surfboard.config.json`
+        };
 
-    const configFilePath = this.getConfigPath(configName);
+        return CONFIG_NAME_PATH_MAP[configName];
+    };
 
-    nconf.file(configName, { file: configFilePath });
+    updateConfig = async (
+        configName: 'globalConfig' | 'localConfig',
+        key: string,
+        value: string
+    ) => {
+        const nconf = new Nconf();
 
-    if (nconf.get(key)) {
-      nconf.set(key, value);
+        const configFilePath = this.getConfigPath(configName);
 
-      nconf.save('');
+        nconf.file(configName, {file: configFilePath});
 
-      return `${configName} was updated successfully`;
-    } else {
-      throw new Error(`Option ${key} is not found in config file`);
-    }
-  }
+        if (nconf.get(key)) {
+            nconf.set(key, value);
 
-  createLocalConfigFile = () => {
-    const nconf = new Nconf();
+            nconf.save('');
 
-    const localConfigFilePath = this.getConfigPath('localConfig');
+            return `${configName} was updated successfully`;
+        } else {
+            throw new Error(`Option ${key} is not found in config file`);
+        }
+    };
 
-    fs.writeFileSync(localConfigFilePath, JSON.stringify(systemConfig));
+    createLocalConfigFile = (config: 'default' | 'docker') => {
+        const nconf = new Nconf();
 
-    nconf.file('localConfig', localConfigFilePath);
+        const localConfigFilePath = this.getConfigPath('localConfig');
 
-    const seeds = this.generateNSeeds(5);
+        if (config === 'default') {
+            fs.writeFileSync(localConfigFilePath, JSON.stringify(systemConfig, null, 4));
+            nconf.file('localConfig', localConfigFilePath);
+            const seeds = this.generateNSeeds(5);
+            nconf.set('env:SEED', seeds[0]);
+            // nconf.set('env:accounts', seeds);
+            nconf.save('');
+        } else {
+            fs.writeFileSync(localConfigFilePath, JSON.stringify(dockerNodeConfig, null, 4));
+        }
+    };
 
-    nconf.set('env:SEED', seeds[0]);
-    // nconf.set('env:accounts', seeds);
+    getConfig(configName: 'globalConfig' | 'localConfig') {
+        const nconf = new Nconf();
 
-    nconf.save('');
-  };
+        const configPath = this.getConfigPath(configName);
 
-  getConfig(configName: 'globalConfig' | 'localConfig') {
-    const nconf = new Nconf();
+        if (fs.existsSync(configPath)) {
+            nconf.defaults({type: 'file', file: configPath});
+        }
 
-    const configPath = this.getConfigPath(configName);
-
-    if (fs.existsSync(configPath)) {
-      nconf.defaults({ type: 'file', file: configPath });
-    }
-
-    return nconf;
-  }
-
-  get config() {
-    const nconf = new Nconf();
-
-    const globalConfigFilePath = this.getConfigPath('globalConfig');
-    const localConfigFilePath = this.getConfigPath('localConfig');
-
-    if (fs.existsSync(globalConfigFilePath)) {
-      nconf.defaults({ type: 'file', file: globalConfigFilePath }); //global config
-    } else {
-      nconf.defaults({ type: 'literal', store: systemConfig }); //system config
+        return nconf;
     }
 
-    if (fs.existsSync(localConfigFilePath)) {
-      nconf.defaults({ type: 'file', file: localConfigFilePath }); //local config
-    }
+    get config() {
+        const nconf = new Nconf();
 
-    return nconf;
-  }
+        const globalConfigFilePath = this.getConfigPath('globalConfig');
+        const localConfigFilePath = this.getConfigPath('localConfig');
+
+        if (fs.existsSync(globalConfigFilePath)) {
+            nconf.defaults({type: 'file', file: globalConfigFilePath}); //global config
+        } else {
+            nconf.defaults({type: 'literal', store: systemConfig}); //system config
+        }
+
+        if (fs.existsSync(localConfigFilePath)) {
+            nconf.defaults({type: 'file', file: localConfigFilePath}); //local config
+        }
+
+        return nconf;
+    }
 }
 
 export default Config;
 
 export {
-  systemConfig
+    systemConfig
 };
 
 // private createLocalConfigFile = () => {
