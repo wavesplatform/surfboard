@@ -19,7 +19,7 @@ $ npm install -g @waves/ride-cli
 $ ride-cli COMMAND
 running command...
 $ ride-cli (-v|--version|version)
-@waves/ride-cli/1.0.1 darwin-x64 node-v10.15.1
+@waves/ride-cli/1.1.0 darwin-x64 node-v10.15.1
 $ ride-cli --help [COMMAND]
 USAGE
   $ ride-cli COMMAND
@@ -47,7 +47,7 @@ ARGUMENTS
   FILE  path to ride file
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/wavesplatform/ride-cli/blob/v1.0.1/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/wavesplatform/ride-cli/blob/v1.1.0/src/commands/compile.ts)_
 
 ## `ride-cli config:change KEY VALUE`
 
@@ -65,7 +65,7 @@ OPTIONS
   -g, --global  change global config
 ```
 
-_See code: [src/commands/config/change.ts](https://github.com/wavesplatform/ride-cli/blob/v1.0.1/src/commands/config/change.ts)_
+_See code: [src/commands/config/change.ts](https://github.com/wavesplatform/ride-cli/blob/v1.1.0/src/commands/config/change.ts)_
 
 ## `ride-cli config:show [KEY]`
 
@@ -82,7 +82,7 @@ OPTIONS
   -g, --global  show global config
 ```
 
-_See code: [src/commands/config/show.ts](https://github.com/wavesplatform/ride-cli/blob/v1.0.1/src/commands/config/show.ts)_
+_See code: [src/commands/config/show.ts](https://github.com/wavesplatform/ride-cli/blob/v1.1.0/src/commands/config/show.ts)_
 
 ## `ride-cli help [COMMAND]`
 
@@ -113,7 +113,7 @@ OPTIONS
   -d, --docker  init with config for "https://hub.docker.com/r/msmolyakov/waves-private-node" docker node
 ```
 
-_See code: [src/commands/init.ts](https://github.com/wavesplatform/ride-cli/blob/v1.0.1/src/commands/init.ts)_
+_See code: [src/commands/init.ts](https://github.com/wavesplatform/ride-cli/blob/v1.1.0/src/commands/init.ts)_
 
 ## `ride-cli test [FILE]`
 
@@ -127,5 +127,5 @@ ARGUMENTS
   FILE  path to test file
 ```
 
-_See code: [src/commands/test.ts](https://github.com/wavesplatform/ride-cli/blob/v1.0.1/src/commands/test.ts)_
+_See code: [src/commands/test.ts](https://github.com/wavesplatform/ride-cli/blob/v1.1.0/src/commands/test.ts)_
 <!-- commandsstop -->
