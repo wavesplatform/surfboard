@@ -108,6 +108,9 @@ Initialize new Ride project
 ```
 USAGE
   $ ride-cli init
+
+OPTIONS
+  -d, --docker  init with config for "https://hub.docker.com/r/msmolyakov/waves-private-node" docker node
 ```
 
 _See code: [src/commands/init.ts](https://github.com/wavesplatform/ride-cli/blob/v1.0.1/src/commands/init.ts)_

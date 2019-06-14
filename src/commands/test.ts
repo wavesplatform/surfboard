@@ -23,7 +23,7 @@ export default class Test extends Command {
         const configService = Config.getInstance();
         const testRunnerService = TestRunner.getInstance();
 
-        const workingDirPath: string = process.cwd()!;
+        const workingDirPath: string = process.cwd();
         const testDirPath = path.join(workingDirPath, configService.config.get('test_directory'));
 
         if (args.file) {
