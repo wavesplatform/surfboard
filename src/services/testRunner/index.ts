@@ -63,7 +63,7 @@ export class TestRunner {
   }
 
   public async run() {    
-    this.mocha.run();
+    return this.mocha.run();
   }
 }
 
