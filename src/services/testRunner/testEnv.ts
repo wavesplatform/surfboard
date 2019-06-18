@@ -21,7 +21,7 @@ const injectTestEnvironment = (context: any) => {
 
     // add all env functions
     Object.entries(envFuncs).forEach(([name, val]) => context[name] = val);
-
+    (envFuncs as any).context = context;
 };
 
 export {
