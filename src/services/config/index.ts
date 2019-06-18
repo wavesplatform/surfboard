@@ -54,7 +54,9 @@ class Config {
         const globalConfigFilePath = this.getConfigPath('globalConfig');
 
         if (!fs.existsSync(globalConfigFilePath)) {
-            fs.writeFileSync(globalConfigFilePath, JSON.stringify(systemConfig));
+            const newGlobalConfig = {...systemConfig, env: {...systemConfig.env, SEED: this.generateNSeeds(1)[0]}};
+            console.log(`❗️Generated new global config with SEED="${newGlobalConfig.env.SEED}"❗️`);
+            fs.writeFileSync(globalConfigFilePath, JSON.stringify(newGlobalConfig, null, 4));
         }
     }
 
@@ -159,27 +161,3 @@ export default Config;
 export {
     systemConfig
 };
-
-// private createLocalConfigFile = () => {
-//   const workingDirPath = process.cwd();
-
-//   const seeds = this.generateNSeeds(5);
-
-//   const config = `
-//     module.exports = {
-//       ride_directory: 'ride',
-//       test_directory: 'test',
-//       env: {
-//         API_BASE: 'https://testnodes.wavesnodes.com/',
-//         CHAIN_ID: 'T',
-//         SEED: '${seeds[0]}',
-//         accounts: [
-//           '${seeds[0]}',
-//           '${seeds[1]}'
-//         ]
-//       }
-//     };
-//   `;
-
-//   fs.appendFileSync(`${workingDirPath}/waves-dev-cli-config.js`, config);
-// };
