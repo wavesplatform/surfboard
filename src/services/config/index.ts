@@ -131,9 +131,11 @@ class Config {
 
         if (fs.existsSync(configPath)) {
             nconf.defaults({type: 'file', file: configPath});
+            return nconf;
+        } else {
+            return {error: `Failed to get ${configName} at ${configPath}`};
         }
 
-        return nconf;
     }
 
     get config() {
