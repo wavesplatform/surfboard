@@ -15,33 +15,33 @@ Ride-cli
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g @waves/ride-cli
-$ ride-cli COMMAND
+$ npm install -g @waves/surfboard
+$ surfboard COMMAND
 running command...
-$ ride-cli (-v|--version|version)
-@waves/ride-cli/1.4.0 darwin-x64 node-v10.15.1
-$ ride-cli --help [COMMAND]
+$ surfboard (-v|--version|version)
+@waves/surfboard/1.4.0 darwin-x64 node-v10.15.1
+$ surfboard --help [COMMAND]
 USAGE
-  $ ride-cli COMMAND
+  $ surfboard COMMAND
 ...
 ```
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`ride-cli compile FILE`](#ride-cli-compile-file)
-* [`ride-cli config:change KEY VALUE`](#ride-cli-configchange-key-value)
-* [`ride-cli config:show [KEY]`](#ride-cli-configshow-key)
-* [`ride-cli help [COMMAND]`](#ride-cli-help-command)
-* [`ride-cli init`](#ride-cli-init)
-* [`ride-cli test [FILE]`](#ride-cli-test-file)
+* [`surfboard compile FILE`](#surfboard-compile-file)
+* [`surfboard config:change KEY VALUE`](#surfboard-configchange-key-value)
+* [`surfboard config:show [KEY]`](#surfboard-configshow-key)
+* [`surfboard help [COMMAND]`](#surfboard-help-command)
+* [`surfboard init`](#surfboard-init)
+* [`surfboard test [FILE]`](#surfboard-test-file)
 
-## `ride-cli compile FILE`
+## `surfboard compile FILE`
 
 compile ride file
 
 ```
 USAGE
-  $ ride-cli compile FILE
+  $ surfboard compile FILE
 
 ARGUMENTS
   FILE  path to ride file
@@ -49,13 +49,13 @@ ARGUMENTS
 
 _See code: [src/commands/compile.ts](https://github.com/wavesplatform/ride-cli/blob/v1.4.0/src/commands/compile.ts)_
 
-## `ride-cli config:change KEY VALUE`
+## `surfboard config:change KEY VALUE`
 
 Change config
 
 ```
 USAGE
-  $ ride-cli config:change KEY VALUE
+  $ surfboard config:change KEY VALUE
 
 ARGUMENTS
   KEY    config option key in dot notion
@@ -67,13 +67,13 @@ OPTIONS
 
 _See code: [src/commands/config/change.ts](https://github.com/wavesplatform/ride-cli/blob/v1.4.0/src/commands/config/change.ts)_
 
-## `ride-cli config:show [KEY]`
+## `surfboard config:show [KEY]`
 
 show config
 
 ```
 USAGE
-  $ ride-cli config:show [KEY]
+  $ surfboard config:show [KEY]
 
 ARGUMENTS
   KEY  Config option key in dot notation
@@ -84,13 +84,13 @@ OPTIONS
 
 _See code: [src/commands/config/show.ts](https://github.com/wavesplatform/ride-cli/blob/v1.4.0/src/commands/config/show.ts)_
 
-## `ride-cli help [COMMAND]`
+## `surfboard help [COMMAND]`
 
-display help for ride-cli
+display help for surfboard
 
 ```
 USAGE
-  $ ride-cli help [COMMAND]
+  $ surfboard help [COMMAND]
 
 ARGUMENTS
   COMMAND  command to show help for
@@ -101,13 +101,13 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.1.6/src/commands/help.ts)_
 
-## `ride-cli init`
+## `surfboard init`
 
 Initialize new Ride project
 
 ```
 USAGE
-  $ ride-cli init
+  $ surfboard init
 
 OPTIONS
   -d, --docker  init with config for "https://hub.docker.com/r/msmolyakov/waves-private-node" docker node
@@ -115,13 +115,13 @@ OPTIONS
 
 _See code: [src/commands/init.ts](https://github.com/wavesplatform/ride-cli/blob/v1.4.0/src/commands/init.ts)_
 
-## `ride-cli test [FILE]`
+## `surfboard test [FILE]`
 
 run test
 
 ```
 USAGE
-  $ ride-cli test [FILE]
+  $ surfboard test [FILE]
 
 ARGUMENTS
   FILE  path to test file
