@@ -1,6 +1,6 @@
 {
   "name": "@waves/surfboard",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "author": {
     "name": "wavesplatform"
   },
@@ -13,7 +13,7 @@
       "email": "siemarell@gmail.com"
     }
   ],
-  "repository": "https://github.com/wavesplatform/ride-cli",
+  "repository": "https://github.com/wavesplatform/surfboard",
   "scripts": {
     "postpack": "rm -f oclif.manifest.json && rm -f tsconfig.tsbuildinfo",
     "posttest": "tslint -p test -t stylish",
@@ -27,10 +27,11 @@
   "keywords": [
     "waves",
     "ride",
-    "ride-cli"
+    "ride-cli",
+    "surfboard"
   ],
   "bin": {
-    "ride-cli": "./bin/run"
+    "surfboard": "./bin/run"
   },
   "bugs": "https://github.com/wavesplatform/surfboard/issues",
   "dependencies": {
