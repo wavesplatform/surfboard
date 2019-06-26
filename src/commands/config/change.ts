@@ -3,7 +3,7 @@ import Command, { flags } from '@oclif/command';
 import Config from '../../services/config';
 
 export default class Change extends Command {
-  static description = 'Change config';
+  static description = 'change config';
 
   static flags = {
     global: flags.boolean({
@@ -36,7 +36,7 @@ export default class Change extends Command {
         : 'localConfig';
 
       const key = args.key.replace(/\./g, ':'); // transform colon notion to dot notion. TODO move to service
-
+      // Todo: check key should represent leaf
       configService.updateConfig(configName, key, args.value)
         .then(res => this.log(res))
         .catch((error: Error) => this.log(error.message));
