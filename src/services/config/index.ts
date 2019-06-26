@@ -7,39 +7,58 @@ import Mocha from 'mocha';
 interface IEnv {
     API_BASE: string
     CHAIN_ID: string
-    SEED?: string
-    accounts?: string[]
+    SEED: string
+    timeout: number
 }
 
 interface IConfig {
     ride_directory: string
     test_directory: string
-    env: IEnv,
+    testnet: {
+        env: IEnv
+    },
+    mainnet: {
+        env: IEnv
+    },
+    docker: {
+        env: IEnv,
+        image: string
+        blockTime: number,
+    },
     mocha: Mocha.MochaOptions
 }
 
 const systemConfig: IConfig = {
     ride_directory: 'ride',
     test_directory: 'test',
-    env: {
-        API_BASE: 'https://testnodes.wavesnodes.com/',
-        CHAIN_ID: 'T',
+    testnet: {
+        env: {
+            API_BASE: 'https://testnodes.wavesnodes.com/',
+            CHAIN_ID: 'T',
+            SEED: 'testnet seed placeholder',
+            timeout: 60000
+        }
+    },
+    mainnet: {
+        env: {
+            API_BASE: 'https://nodes.wavesplatform.com/',
+            CHAIN_ID: 'W',
+            SEED: 'mainnet seed placeholder',
+            timeout: 60000
+        }
+    },
+    docker: {
+        env: {
+            API_BASE: 'http://localhost:6869/',
+            CHAIN_ID: 'R',
+            SEED: 'rich',
+            timeout: 60000
+        },
+        blockTime: 10000,
+        image: 'msmolyakov/waves-private-node'
     },
     mocha: {
-        timeout: 20000
-    }
-};
-
-const dockerNodeConfig: IConfig = {
-    ride_directory: 'ride',
-    test_directory: 'test',
-    env: {
-        API_BASE: 'http://localhost:6869/',
-        CHAIN_ID: 'R',
-        SEED: 'rich'
-    },
-    mocha: {
-        timeout: 20000
+        timeout: 60000
     }
 };
 
@@ -54,8 +73,11 @@ class Config {
         const globalConfigFilePath = this.getConfigPath('globalConfig');
 
         if (!fs.existsSync(globalConfigFilePath)) {
-            const newGlobalConfig = {...systemConfig, env: {...systemConfig.env, SEED: this.generateNSeeds(1)[0]}};
-            console.log(`❗️Generated new global config with SEED="${newGlobalConfig.env.SEED}"❗️`);
+
+            const newGlobalConfig = this.generateConfig();
+            console.log(`❗️Generated new global config
+Testnet seed="${newGlobalConfig.testnet.env.SEED}"
+Mainnet seed="${newGlobalConfig.mainnet.env.SEED}"❗`);
             fs.writeFileSync(globalConfigFilePath, JSON.stringify(newGlobalConfig, null, 4));
         }
     }
@@ -73,6 +95,14 @@ class Config {
             return generateMnemonic();
         });
     };
+
+    private generateConfig(): IConfig {
+        const [mainnetSeed, testnetSeed] = this.generateNSeeds(2);
+        const config = JSON.parse(JSON.stringify(systemConfig));
+        config.testnet.env.SEED = testnetSeed;
+        config.mainnet.env.SEED = mainnetSeed;
+        return config;
+    }
 
     getConfigPath = (configName: 'globalConfig' | 'localConfig') => {
         const workingDirPath: string = process.cwd()!;
@@ -107,21 +137,13 @@ class Config {
         }
     };
 
-    createLocalConfigFile = (config: 'default' | 'docker') => {
-        const nconf = new Nconf();
-
+    createLocalConfigFile = () => {
         const localConfigFilePath = this.getConfigPath('localConfig');
-
-        if (config === 'default') {
-            fs.writeFileSync(localConfigFilePath, JSON.stringify(systemConfig, null, 4));
-            nconf.file('localConfig', localConfigFilePath);
-            const seeds = this.generateNSeeds(5);
-            nconf.set('env:SEED', seeds[0]);
-            // nconf.set('env:accounts', seeds);
-            nconf.save('');
-        } else {
-            fs.writeFileSync(localConfigFilePath, JSON.stringify(dockerNodeConfig, null, 4));
-        }
+        const config = this.generateConfig();
+        console.log(`❗️Generated new local config
+Testnet seed="${config.testnet.env.SEED}"
+Mainnet seed="${config.mainnet.env.SEED}"❗`);
+        fs.writeFileSync(localConfigFilePath, JSON.stringify(config, null, 4));
     };
 
     getConfig(configName: 'globalConfig' | 'localConfig') {

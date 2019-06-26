@@ -6,19 +6,11 @@ import cli from 'cli-ux';
 
 import { rideExamples, testExamples } from '../services/library';
 import Config from '../services/config';
-import * as flags from '@oclif/command/lib/flags';
 
 export default class Init extends Command {
-    static description = 'Initialize new Ride project';
+    static description = 'initialize new Ride project';
 
-    static flags = {
-        docker: flags.boolean({
-            char: 'd',
-            description: 'init with config for "https://hub.docker.com/r/msmolyakov/waves-private-node" docker node'
-        })
-    };
-
-    private initWorkingDir = (config: 'default' | 'docker') => {
+    private initWorkingDir = () => {
         cli.action.start('Project initialization');
 
         const configService = Config.getInstance();
@@ -27,19 +19,18 @@ export default class Init extends Command {
         const rideDirPath = path.join(workingDirPath, configService.config.get('ride_directory'));
         const testDirPath = path.join(workingDirPath, configService.config.get('test_directory'));
 
-        configService.createLocalConfigFile(config);
+        configService.createLocalConfigFile();
 
         fs.mkdirSync(rideDirPath, {recursive: true});
-        fs.appendFileSync(`${rideDirPath}/fomo.ride`, rideExamples.fomo);
+        fs.appendFileSync(`${rideDirPath}/wallet.ride`, rideExamples.wallet);
 
         fs.mkdirSync(testDirPath, {recursive: true});
-        fs.appendFileSync(`${testDirPath}/basic.js`, testExamples.basic);
+        fs.appendFileSync(`${testDirPath}/wallet.ride_test.js`, testExamples.wallet);
 
         cli.action.stop();
     };
 
     run = async () => {
-        const {flags} = this.parse(Init);
         const workingDirPath = process.cwd();
 
         const workingDirContent: string[] = fs.readdirSync(workingDirPath);
@@ -58,12 +49,12 @@ export default class Init extends Command {
             }]);
 
             if (responses.shouldInitialize) {
-                this.initWorkingDir(flags.docker ? 'docker' : 'default');
+                this.initWorkingDir();
             } else {
                 this.log('Project initialization is cancelled');
             }
         } else {
-            this.initWorkingDir(flags.docker ? 'docker' : 'default');
+            this.initWorkingDir();
         }
     };
 }

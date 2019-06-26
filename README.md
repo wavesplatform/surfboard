@@ -47,11 +47,11 @@ ARGUMENTS
   FILE  path to ride file
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/wavesplatform/ride-cli/blob/v1.5.0/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/wavesplatform/surfboard/blob/v1.5.0/src/commands/compile.ts)_
 
 ## `surfboard config:change KEY VALUE`
 
-Change config
+change config
 
 ```
 USAGE
@@ -65,7 +65,7 @@ OPTIONS
   -g, --global  change global config
 ```
 
-_See code: [src/commands/config/change.ts](https://github.com/wavesplatform/ride-cli/blob/v1.5.0/src/commands/config/change.ts)_
+_See code: [src/commands/config/change.ts](https://github.com/wavesplatform/surfboard/blob/v1.5.0/src/commands/config/change.ts)_
 
 ## `surfboard config:show [KEY]`
 
@@ -82,7 +82,7 @@ OPTIONS
   -g, --global  Show global config
 ```
 
-_See code: [src/commands/config/show.ts](https://github.com/wavesplatform/ride-cli/blob/v1.5.0/src/commands/config/show.ts)_
+_See code: [src/commands/config/show.ts](https://github.com/wavesplatform/surfboard/blob/v1.5.0/src/commands/config/show.ts)_
 
 ## `surfboard help [COMMAND]`
 
@@ -103,17 +103,14 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.1.6
 
 ## `surfboard init`
 
-Initialize new Ride project
+initialize new Ride project
 
 ```
 USAGE
   $ surfboard init
-
-OPTIONS
-  -d, --docker  init with config for "https://hub.docker.com/r/msmolyakov/waves-private-node" docker node
 ```
 
-_See code: [src/commands/init.ts](https://github.com/wavesplatform/ride-cli/blob/v1.5.0/src/commands/init.ts)_
+_See code: [src/commands/init.ts](https://github.com/wavesplatform/surfboard/blob/v1.5.0/src/commands/init.ts)_
 
 ## `surfboard test [FILE]`
 
@@ -125,7 +122,10 @@ USAGE
 
 ARGUMENTS
   FILE  path to test file
+
+OPTIONS
+  -n, --network=testnet|mainnet|docker  [default: testnet] which network should be used for test
 ```
 
-_See code: [src/commands/test.ts](https://github.com/wavesplatform/ride-cli/blob/v1.5.0/src/commands/test.ts)_
+_See code: [src/commands/test.ts](https://github.com/wavesplatform/surfboard/blob/v1.5.0/src/commands/test.ts)_
 <!-- commandsstop -->
