@@ -3,8 +3,9 @@ import recursive from 'recursive-readdir';
 import * as path from 'path';
 
 import { Command } from '@oclif/command';
+import * as flags from '@oclif/command/lib/flags';
 
-import configService from '../services/config';
+import configService, { systemConfig } from '../services/config';
 import TestRunner from '../services/testRunner';
 
 export default class Test extends Command {
@@ -17,8 +18,19 @@ export default class Test extends Command {
         }
     ];
 
+    static flags = {
+        env: flags.string({
+            // // char: 'e',
+            // name: 'env',
+            // default: 'custom',
+            description: 'which environment should be used for test'
+        })
+    };
+
     async run() {
         const {args} = this.parse(Test);
+
+        const {flags} = this.parse(Test);
 
         const testRunnerService = TestRunner.getInstance();
 
@@ -45,7 +57,7 @@ export default class Test extends Command {
             }
         }
 
-        await testRunnerService.run();
+        await testRunnerService.run(flags.env);
 
     }
 }

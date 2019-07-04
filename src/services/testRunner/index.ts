@@ -62,14 +62,24 @@ export class TestRunner {
         this.mocha.addFile(path);
     }
 
-    public async run() {
+    public async run(envName?: string) {
         const config = configService.config;
 
-        await this.checkNode(url.parse(configService.config.get('env:API_BASE')).href);
+
+
+        if (envName == null){
+            envName = config.get('defaultEnv');
+        }
+
+        const env = config.get('envs:' + envName);
+
+        if (env == null) cli.error(`Failed to get environment "${envName}"\n Check your if your config contains it`)
+
+        await this.checkNode(url.parse(env.API_BASE).href);
 
         global.env = {
             file: this.getContractFile,
-            ...config.get('env')
+            ...env
         };
 
 
