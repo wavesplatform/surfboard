@@ -1,7 +1,7 @@
 import url from 'url';
 import axios from 'axios';
 import Docker, { Container } from 'dockerode';
-import Config from '../config';
+import configService from '../config';
 
 class DockerNodeService {
     private docker = new Docker();
@@ -9,9 +9,8 @@ class DockerNodeService {
 
 
     async startContainer() {
-        const config = Config.getInstance().config;
-        const nodeUlr = url.parse(config.get('docker:env:API_BASE'));
-        const image = config.get('docker:image');
+        const nodeUlr = url.parse(configService.config.get('docker:env:API_BASE'));
+        const image = configService.config.get('docker:image');
 
         this.container = await this.docker.createContainer({
             Image: image,

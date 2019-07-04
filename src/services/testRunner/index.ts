@@ -1,8 +1,11 @@
 import Mocha from 'mocha';
 import * as fs from 'fs';
 import * as path from 'path';
+import axios from 'axios';
+import cli from 'cli-ux';
+import url from 'url';
 
-import Config from '../config';
+import configService from '../config';
 import dockerNode from '../dockerNode';
 import { injectTestEnvironment } from './testEnv';
 
@@ -12,7 +15,6 @@ export class TestRunner {
     private static instance: TestRunner;
 
     constructor(mochaOptions: Mocha.MochaOptions) {
-        const configService = Config.getInstance();
 
         const config = configService.config;
 
@@ -30,7 +32,6 @@ export class TestRunner {
 
     public static getInstance(): TestRunner { // singleton
         if (!TestRunner.instance) {
-            const configService = Config.getInstance();
 
             const mochaOptions = configService.config.get('mocha') as Mocha.MochaOptions;
 
@@ -41,8 +42,6 @@ export class TestRunner {
     }
 
     getContractFile = (fileName: string) => {
-        const configService = Config.getInstance();
-
         let workingDirPath: string = process.cwd()!;
 
         const rideDirPath = path.join(workingDirPath, configService.config.get('ride_directory'));
@@ -63,25 +62,19 @@ export class TestRunner {
         this.mocha.addFile(path);
     }
 
-    public async run(network: 'testnet' | 'mainnet' | 'docker') {
-        const configService = Config.getInstance();
+    public async run() {
         const config = configService.config;
 
+        await this.checkNode(url.parse(configService.config.get('env:API_BASE')).href);
 
         global.env = {
             file: this.getContractFile,
-            ...config.get(network).env
+            ...config.get('env')
         };
 
 
         let failed = true;
         try {
-            if (network === 'docker') {
-                console.log('Starting docker container');
-                await dockerNode.startContainer();
-                console.log('Container started');
-            }
-
             const result = this.mocha.run();
 
             // wait for test to finish running
@@ -93,12 +86,20 @@ export class TestRunner {
                 failed = false;
             }
         } catch (e) {
-            console.error(e)
+            console.error(e);
         } finally {
-            console.log('Stopping docker container');
-            await dockerNode.stopContainer();
-            console.log('Container stopped');
+
             if (failed) process.exit(2);
+        }
+    }
+
+    async checkNode(nodeUrl?: string) {
+        try {
+            await axios.get('node/version', {baseURL: nodeUrl});
+        } catch (e) {
+            cli.error(`Failed to access node on "${nodeUrl}"\n` +
+                'Make sure env.API_BASE is correct\n' +
+                'In case of using local node, make sure it is up and running!');
         }
     }
 }

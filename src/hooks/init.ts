@@ -1,12 +1,9 @@
 import { Hook } from '@oclif/config';
 
-import Config from '../services/config';
-import TestRunner from '../services/testRunner';
+import configService from '../services/config';
 
-const hook: Hook<'init'> = async function (options) {  
-  Config.getInstance(options.config);
-
-  TestRunner.getInstance();
+const hook: Hook<'init'> = async function (options) {
+    configService.initialize(options.config);
 };
 
 export default hook;

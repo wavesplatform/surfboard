@@ -5,15 +5,13 @@ import * as inquirer from 'inquirer';
 import cli from 'cli-ux';
 
 import { rideExamples, testExamples } from '../services/library';
-import Config from '../services/config';
+import configService from '../services/config';
 
 export default class Init extends Command {
     static description = 'initialize new Ride project';
 
     private initWorkingDir = () => {
         cli.action.start('Project initialization');
-
-        const configService = Config.getInstance();
 
         const workingDirPath = process.cwd();
         const rideDirPath = path.join(workingDirPath, configService.config.get('ride_directory'));

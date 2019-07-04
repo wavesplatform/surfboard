@@ -1,6 +1,6 @@
 import Command, { flags } from '@oclif/command';
 import cli from 'cli-ux';
-import Config from '../../services/config';
+import configService from '../../services/config';
 
 export default class Show extends Command {
     static description = 'show config';
@@ -22,17 +22,15 @@ export default class Show extends Command {
     async run() {
         const {args, flags} = this.parse(Show);
 
-        const configService = Config.getInstance();
-
         const configName = flags.global
             ? 'globalConfig'
             : 'localConfig';
 
         const config = configService.getConfig(configName);
 
-        if ('error' in config){
+        if ('error' in config) {
             cli.error(config.error);
-            return
+            return;
         }
         cli.styledHeader(configName);
 
@@ -46,7 +44,7 @@ export default class Show extends Command {
         }
 
         if (result === undefined) {
-            cli.error(`Failed to get key:"${args.key}" from config`)
+            cli.error(`Failed to get key:"${args.key}" from config`);
         }
 
         cli.styledJSON(result);

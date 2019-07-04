@@ -11,83 +11,88 @@ interface IEnv {
     timeout: number
 }
 
+// interface IConfig {
+//     ride_directory: string
+//     test_directory: string
+//     testnet: {
+//         env: IEnv
+//     },
+//     mainnet: {
+//         env: IEnv
+//     },
+//     docker: {
+//         env: IEnv,
+//         image: string
+//         blockTime: number,
+//     },
+//     mocha: Mocha.MochaOptions
+// }
+
+// const systemConfig: IConfig = {
+//     ride_directory: 'ride',
+//     test_directory: 'test',
+//     testnet: {
+//         env: {
+//             API_BASE: 'https://testnodes.wavesnodes.com/',
+//             CHAIN_ID: 'T',
+//             SEED: 'testnet seed placeholder',
+//             timeout: 60000
+//         }
+//     },
+//     mainnet: {
+//         env: {
+//             API_BASE: 'https://nodes.wavesplatform.com/',
+//             CHAIN_ID: 'W',
+//             SEED: 'mainnet seed placeholder',
+//             timeout: 60000
+//         }
+//     },
+//     docker: {
+//         env: {
+//             API_BASE: 'http://localhost:6869/',
+//             CHAIN_ID: 'R',
+//             SEED: 'rich',
+//             timeout: 60000
+//         },
+//         blockTime: 10000,
+//         image: 'msmolyakov/waves-private-node'
+//     },
+//     mocha: {
+//         timeout: 60000
+//     }
+// };
+
 interface IConfig {
     ride_directory: string
     test_directory: string
-    testnet: {
-        env: IEnv
-    },
-    mainnet: {
-        env: IEnv
-    },
-    docker: {
-        env: IEnv,
-        image: string
-        blockTime: number,
-    },
+    env: IEnv,
     mocha: Mocha.MochaOptions
 }
 
 const systemConfig: IConfig = {
     ride_directory: 'ride',
     test_directory: 'test',
-    testnet: {
-        env: {
-            API_BASE: 'https://testnodes.wavesnodes.com/',
-            CHAIN_ID: 'T',
-            SEED: 'testnet seed placeholder',
-            timeout: 60000
-        }
-    },
-    mainnet: {
-        env: {
-            API_BASE: 'https://nodes.wavesplatform.com/',
-            CHAIN_ID: 'W',
-            SEED: 'mainnet seed placeholder',
-            timeout: 60000
-        }
-    },
-    docker: {
-        env: {
-            API_BASE: 'http://localhost:6869/',
-            CHAIN_ID: 'R',
-            SEED: 'rich',
-            timeout: 60000
-        },
-        blockTime: 10000,
-        image: 'msmolyakov/waves-private-node'
+    env: {
+        API_BASE: 'http://localhost:6869/',
+        CHAIN_ID: 'R',
+        SEED: 'rich',
+        timeout: 60000
     },
     mocha: {
         timeout: 60000
     }
 };
 
-class Config {
-    private oclifConfig: IOclifConfig;
+class ConfigService {
+    oclifConfig?: IOclifConfig;
 
-    private static instance: Config;
-
-    private constructor(oclifConfig: IOclifConfig) {
+    initialize(oclifConfig: IOclifConfig) {
         this.oclifConfig = oclifConfig;
-
         const globalConfigFilePath = this.getConfigPath('globalConfig');
 
         if (!fs.existsSync(globalConfigFilePath)) {
-
-            const newGlobalConfig = this.generateConfig();
-            console.log(`❗️Generated new global config
-Testnet seed="${newGlobalConfig.testnet.env.SEED}"
-Mainnet seed="${newGlobalConfig.mainnet.env.SEED}"❗`);
-            fs.writeFileSync(globalConfigFilePath, JSON.stringify(newGlobalConfig, null, 4));
+            fs.writeFileSync(globalConfigFilePath, JSON.stringify(systemConfig, null, 4));
         }
-    }
-
-    public static getInstance(oclifConfig?: IOclifConfig): Config {// singleton
-        if (oclifConfig && !Config.instance) {
-            Config.instance = new Config(oclifConfig);
-        }
-
-        return Config.instance;
     }
 
     private generateNSeeds = (N: number) => {
@@ -96,19 +101,12 @@ Mainnet seed="${newGlobalConfig.mainnet.env.SEED}"❗`);
         });
     };
 
-    private generateConfig(): IConfig {
-        const [mainnetSeed, testnetSeed] = this.generateNSeeds(2);
-        const config = JSON.parse(JSON.stringify(systemConfig));
-        config.testnet.env.SEED = testnetSeed;
-        config.mainnet.env.SEED = mainnetSeed;
-        return config;
-    }
-
     getConfigPath = (configName: 'globalConfig' | 'localConfig') => {
+
         const workingDirPath: string = process.cwd()!;
 
         const CONFIG_NAME_PATH_MAP: { [key: string]: string } = {
-            globalConfig: `${this.oclifConfig.root}/lib/surfboard.config.json`,
+            globalConfig: `${this.oclifConfig && this.oclifConfig.root}/lib/surfboard.config.json`,
             localConfig: `${workingDirPath}/surfboard.config.json`
         };
 
@@ -139,11 +137,7 @@ Mainnet seed="${newGlobalConfig.mainnet.env.SEED}"❗`);
 
     createLocalConfigFile = () => {
         const localConfigFilePath = this.getConfigPath('localConfig');
-        const config = this.generateConfig();
-        console.log(`❗️Generated new local config
-Testnet seed="${config.testnet.env.SEED}"
-Mainnet seed="${config.mainnet.env.SEED}"❗`);
-        fs.writeFileSync(localConfigFilePath, JSON.stringify(config, null, 4));
+        fs.writeFileSync(localConfigFilePath, JSON.stringify(systemConfig, null, 4));
     };
 
     getConfig(configName: 'globalConfig' | 'localConfig') {
@@ -180,7 +174,13 @@ Mainnet seed="${config.mainnet.env.SEED}"❗`);
     }
 }
 
-export default Config;
+const configService = new ConfigService();
+const prx = new Proxy(configService, {get: (target, p) => {
+        if (p !== 'initialize' && !target.oclifConfig) throw new Error('Config service has not been initialized');
+        return (target as any)[p];
+    }});
+
+export default prx;
 
 export {
     systemConfig

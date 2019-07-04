@@ -122,9 +122,6 @@ USAGE
 
 ARGUMENTS
   FILE  path to test file
-
-OPTIONS
-  -n, --network=testnet|mainnet|docker  [default: testnet] which network should be used for test
 ```
 
 _See code: [src/commands/test.ts](https://github.com/wavesplatform/surfboard/blob/v1.6.0-beta.0/src/commands/test.ts)_
