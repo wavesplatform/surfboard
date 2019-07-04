@@ -4,7 +4,7 @@ import { Command } from '@oclif/command';
 import * as inquirer from 'inquirer';
 import cli from 'cli-ux';
 
-import { rideExamples, testExamples } from '../services/library';
+import { rideExamples, testExamples } from '../library';
 import configService from '../services/config';
 
 export default class Init extends Command {

@@ -41,21 +41,18 @@ export class TestRunner {
         return TestRunner.instance;
     }
 
-    getContractFile = (fileName: string) => {
-        let workingDirPath: string = process.cwd()!;
+    getContractFile = (fileNameOrPath: string) => {
+        const pathIfFileName = path.join(process.cwd(), configService.config.get('ride_directory'), fileNameOrPath);
+        const pathIfPath = path.resolve(process.cwd(), fileNameOrPath);
 
-        const rideDirPath = path.join(workingDirPath, configService.config.get('ride_directory'));
-        const filePath = `${rideDirPath}/${fileName}`;
-
-        if (fs.existsSync(rideDirPath)) {
-            if (fs.existsSync(filePath)) {
-                return fs.readFileSync(filePath, 'utf8');
-            } else {
-                throw(new Error(`File with name ${fileName} was not found`));
-            }
-        } else {
-            throw(new Error('There is no "ride" directory in working directory'));
+        if (fs.existsSync(pathIfPath)) {
+            return fs.readFileSync(pathIfPath, 'utf-8');
         }
+        else if (fs.existsSync(pathIfFileName)) {
+            return fs.readFileSync(pathIfFileName, 'utf8');
+        }
+
+        throw new Error(`File "${fileNameOrPath}" not found`);
     };
 
     public addFile(path: string) {
@@ -66,14 +63,13 @@ export class TestRunner {
         const config = configService.config;
 
 
-
-        if (envName == null){
+        if (envName == null) {
             envName = config.get('defaultEnv');
         }
 
         const env = config.get('envs:' + envName);
 
-        if (env == null) cli.error(`Failed to get environment "${envName}"\n Check your if your config contains it`)
+        if (env == null) cli.error(`Failed to get environment "${envName}"\n Check your if your config contains it`);
 
         await this.checkNode(url.parse(env.API_BASE).href);
 

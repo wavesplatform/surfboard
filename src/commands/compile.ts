@@ -1,6 +1,7 @@
 import { Command } from '@oclif/command';
 import cli from 'cli-ux';
-import { compile } from '@waves/ride-js';
+import { compile, ICompilationResult } from '@waves/ride-js';
+import * as flags from '@oclif/command/lib/flags';
 
 import TestRunner from '../services/testRunner';
 
@@ -15,18 +16,25 @@ export default class Compile extends Command {
         }
     ];
 
-    private compile = async (file: string) => {
+    static flags = {
+        fullInfo: flags.boolean({
+            description: 'outputs JSON with additional info. Such as complexity, size etc.'
+        })
+    };
+
+    private compile = async (file: string): Promise<ICompilationResult> => {
         const resultOrError = compile(file);
 
         if ('error' in resultOrError) {
             throw new Error(resultOrError.error);
         }
 
-        return resultOrError.result.base64;
+        return resultOrError;
     };
 
     async run() {
         const {args} = this.parse(Compile);
+        const {flags} = this.parse(Compile);
 
         const testRunnerService = TestRunner.getInstance();
 
@@ -41,10 +49,16 @@ export default class Compile extends Command {
 
             if (file) {
                 this.compile(file)
-                    .then((base64: string) => {
-                        cli.styledHeader(`${args.file} compiled succesfully`);
-
-                        cli.styledJSON(base64);
+                    .then((result: ICompilationResult) => {
+                        if (flags.fullInfo) {
+                            cli.styledJSON({
+                                base64: result.result.base64,
+                                size: result.result.size,
+                                complexity: result.result.complexity
+                            });
+                        } else {
+                            cli.log(result.result.base64);
+                        }
                     })
                     .catch((error: Error) => {
                         cli.styledHeader(`${args.file} was not compiled`);
