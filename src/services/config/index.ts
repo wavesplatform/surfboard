@@ -29,7 +29,7 @@ export const systemConfig: IConfig = {
         custom: {
             API_BASE: 'http://localhost:6869/',
             CHAIN_ID: 'R',
-            SEED: 'rich',
+            SEED: 'waves private node seed with waves tokens',
             timeout: 60000
         },
         testnet: {
