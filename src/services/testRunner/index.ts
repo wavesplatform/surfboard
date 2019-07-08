@@ -4,7 +4,7 @@ import * as path from 'path';
 import axios from 'axios';
 import cli from 'cli-ux';
 import url from 'url';
-
+import { libs } from '@waves/waves-transactions';
 import configService from '../config';
 import dockerNode from '../dockerNode';
 import { injectTestEnvironment } from './testEnv';
@@ -47,7 +47,7 @@ export class TestRunner {
         this.mocha.addFile(path);
     }
 
-    public async run({envName, verbose}: {envName?: string, verbose: boolean}) {
+    public async run({envName, verbose}: { envName?: string, verbose: boolean }) {
         const config = configService.config;
 
 
@@ -59,6 +59,9 @@ export class TestRunner {
         if (env == null) cli.error(`Failed to get environment "${envName}"\n Check your if your config contains it`);
         await this.checkNode(url.parse(env.API_BASE).href);
 
+        const envAddress = libs.crypto.address(env.SEED, env.CHAIN_ID);
+
+        cli.log(`Starting test with "${envName}" environment\nRoot address: ${envAddress}`);
         env = {
             file: this.getContractFile,
             ...env

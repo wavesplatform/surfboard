@@ -3,6 +3,7 @@ import { Provider as Nconf } from 'nconf';
 import { generateMnemonic } from 'bip39';
 import { IConfig as IOclifConfig } from '@oclif/config';
 import Mocha from 'mocha';
+import { libs } from '@waves/waves-transactions';
 
 export interface IEnv {
     API_BASE: string
@@ -102,7 +103,9 @@ class ConfigService {
     createLocalConfigFile = () => {
         const localConfigFilePath = this.getConfigPath('localConfig');
         const config = this.generateConfig();
-        console.log(`❗️Generated new local config\nTestnet seed="${config.envs.testnet.SEED}"❗`);
+        const seed = config.envs.testnet.SEED;
+        const addr = libs.crypto.address(seed, 'T');
+        console.log(`❗️Generated new local config\nTestnet seed="${seed}"\nTestnet address="${addr}"❗`);
         fs.writeFileSync(localConfigFilePath, JSON.stringify(config, null, 4));
     };
 

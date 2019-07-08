@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import cli from 'cli-ux';
 import { addEnvFunctionsToGlobal } from '@waves/js-test-env';
 
 chai.use(chaiAsPromised);
@@ -25,12 +26,18 @@ const injectTestEnvironment = (context: any, {verbose, env}: any) => {
 
 
 const broadcastWrapper = (f: any) => async (tx: any, ...args: any) => {
-    console.log('Sending transactions to node');
-    console.log(tx);
-    const resp = await f(tx, ...args);
-    console.log('Node responded with');
-    console.log(resp);
-    return resp;
+    cli.log('\nSending transaction to node:')
+    cli.styledJSON(tx)
+    try {
+        const resp = await f(tx, ...args);
+        cli.log('Node responded with:');
+        cli.styledJSON(resp);
+        return resp;
+    }catch (e) {
+        cli.log('\nNode responded with:');
+        cli.styledJSON(e);
+        throw e;
+    }
 };
 
 export {
