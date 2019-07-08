@@ -15,19 +15,7 @@ export class TestRunner {
     private static instance: TestRunner;
 
     constructor(mochaOptions: Mocha.MochaOptions) {
-
-        const config = configService.config;
-
         this.mocha = new Mocha(mochaOptions);
-
-        const env = {
-            file: this.getContractFile,
-            ...config.get('env')
-        };
-
-        injectTestEnvironment(global);
-
-        global.env = env;
     }
 
     public static getInstance(): TestRunner { // singleton
@@ -59,7 +47,7 @@ export class TestRunner {
         this.mocha.addFile(path);
     }
 
-    public async run(envName?: string) {
+    public async run({envName, verbose}: {envName?: string, verbose: boolean}) {
         const config = configService.config;
 
 
@@ -67,17 +55,16 @@ export class TestRunner {
             envName = config.get('defaultEnv');
         }
 
-        const env = config.get('envs:' + envName);
-
+        let env = config.get('envs:' + envName);
         if (env == null) cli.error(`Failed to get environment "${envName}"\n Check your if your config contains it`);
-
         await this.checkNode(url.parse(env.API_BASE).href);
 
-        global.env = {
+        env = {
             file: this.getContractFile,
             ...env
         };
 
+        injectTestEnvironment(global, {verbose, env});
 
         let failed = true;
         try {

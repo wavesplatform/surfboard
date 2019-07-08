@@ -24,6 +24,12 @@ export default class Test extends Command {
             // name: 'env',
             // default: 'custom',
             description: 'which environment should be used for test'
+        }),
+        verbose: flags.boolean({
+            char: 'v',
+            // name: 'env',
+            // default: 'custom',
+            description: 'logs all transactions and node responses'
         })
     };
 
@@ -57,7 +63,7 @@ export default class Test extends Command {
             }
         }
 
-        await testRunnerService.run(flags.env);
+        await testRunnerService.run({envName: flags.env, verbose: flags.verbose});
 
     }
 }
