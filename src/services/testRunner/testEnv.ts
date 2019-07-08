@@ -1,11 +1,13 @@
 import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import * as envFuncs from '@waves/js-test-env';
+import cli from 'cli-ux';
+import { addEnvFunctionsToGlobal } from '@waves/js-test-env';
 
 chai.use(chaiAsPromised);
 
-const injectTestEnvironment = (context: any) => {
-    context.env = {};
+const injectTestEnvironment = (context: any, {verbose, env}: any) => {
+
+    context.env = env;
 
     context.expect = chai.expect;
 
@@ -19,9 +21,23 @@ const injectTestEnvironment = (context: any) => {
         return context.mocha;
     };
 
-    // add all env functions
-    Object.entries(envFuncs).forEach(([name, val]) => context[name] = val);
-    (envFuncs as any).context = context;
+    addEnvFunctionsToGlobal(context, {broadcastWrapper: verbose && broadcastWrapper});
+};
+
+
+const broadcastWrapper = (f: any) => async (tx: any, ...args: any) => {
+    cli.log('\nSending transaction to node:')
+    cli.styledJSON(tx)
+    try {
+        const resp = await f(tx, ...args);
+        cli.log('Node responded with:');
+        cli.styledJSON(resp);
+        return resp;
+    }catch (e) {
+        cli.log('\nNode responded with:');
+        cli.styledJSON(e);
+        throw e;
+    }
 };
 
 export {

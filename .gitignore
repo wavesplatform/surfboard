@@ -91,3 +91,6 @@ node_modules
 .editorconfig 
 .travis.yml
 
+ride
+test
+surfboard.config.json

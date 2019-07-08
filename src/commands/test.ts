@@ -5,7 +5,7 @@ import * as path from 'path';
 import { Command } from '@oclif/command';
 import * as flags from '@oclif/command/lib/flags';
 
-import Config from '../services/config';
+import configService, { systemConfig } from '../services/config';
 import TestRunner from '../services/testRunner';
 
 export default class Test extends Command {
@@ -19,19 +19,25 @@ export default class Test extends Command {
     ];
 
     static flags = {
-        network: flags.string({
-            char: 'n',
-            options: ['testnet', 'mainnet', 'docker'],
-            default: 'testnet',
-            description: 'which network should be used for test'
+        env: flags.string({
+            // // char: 'e',
+            // name: 'env',
+            // default: 'custom',
+            description: 'which environment should be used for test'
+        }),
+        verbose: flags.boolean({
+            char: 'v',
+            // name: 'env',
+            // default: 'custom',
+            description: 'logs all transactions and node responses'
         })
     };
 
     async run() {
         const {args} = this.parse(Test);
+
         const {flags} = this.parse(Test);
 
-        const configService = Config.getInstance();
         const testRunnerService = TestRunner.getInstance();
 
         const workingDirPath: string = process.cwd();
@@ -57,12 +63,7 @@ export default class Test extends Command {
             }
         }
 
-        await testRunnerService.run(flags.network as any);
+        await testRunnerService.run({envName: flags.env, verbose: flags.verbose});
 
-        // result.once('end', () => {
-        //     if (result.stats && result.stats.failures > 0) {
-        //         process.exit(2);
-        //     }
-        // });
     }
 }

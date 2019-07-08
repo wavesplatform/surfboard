@@ -3,17 +3,15 @@ import * as path from 'path';
 import { Command } from '@oclif/command';
 import * as inquirer from 'inquirer';
 import cli from 'cli-ux';
+import { downloadHttps } from '../utils';
 
-import { rideExamples, testExamples } from '../services/library';
-import Config from '../services/config';
+import configService from '../services/config';
 
 export default class Init extends Command {
     static description = 'initialize new Ride project';
 
-    private initWorkingDir = () => {
+    private initWorkingDir = async () => {
         cli.action.start('Project initialization');
-
-        const configService = Config.getInstance();
 
         const workingDirPath = process.cwd();
         const rideDirPath = path.join(workingDirPath, configService.config.get('ride_directory'));
@@ -22,10 +20,22 @@ export default class Init extends Command {
         configService.createLocalConfigFile();
 
         fs.mkdirSync(rideDirPath, {recursive: true});
-        fs.appendFileSync(`${rideDirPath}/wallet.ride`, rideExamples.wallet);
+        const rideUrl = 'https://raw.githubusercontent.com/wavesplatform/ride-examples/master/ride4dapps/wallet/ride/wallet.ride';
+        const rideFilePath = './ride/wallet.ride';
+        try {
+            await downloadHttps(rideUrl, rideFilePath);
+        } catch (e) {
+            console.error('Failed to download ride example file');
+        }
 
         fs.mkdirSync(testDirPath, {recursive: true});
-        fs.appendFileSync(`${testDirPath}/wallet.ride_test.js`, testExamples.wallet);
+        const testUrl = 'https://raw.githubusercontent.com/wavesplatform/ride-examples/master/ride4dapps/wallet/test/wallet.js';
+        const testFilePath = './test/wallet.ride-test.js';
+        try {
+            await downloadHttps(testUrl, testFilePath);
+        } catch (e) {
+            console.error('Failed to download test example file');
+        }
 
         cli.action.stop();
     };
@@ -49,12 +59,12 @@ export default class Init extends Command {
             }]);
 
             if (responses.shouldInitialize) {
-                this.initWorkingDir();
+                await this.initWorkingDir();
             } else {
                 this.log('Project initialization is cancelled');
             }
         } else {
-            this.initWorkingDir();
+            await this.initWorkingDir();
         }
     };
 }

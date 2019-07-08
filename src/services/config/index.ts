@@ -3,112 +3,68 @@ import { Provider as Nconf } from 'nconf';
 import { generateMnemonic } from 'bip39';
 import { IConfig as IOclifConfig } from '@oclif/config';
 import Mocha from 'mocha';
+import { libs } from '@waves/waves-transactions';
 
-interface IEnv {
+export interface IEnv {
     API_BASE: string
     CHAIN_ID: string
     SEED: string
     timeout: number
 }
 
-interface IConfig {
+export interface IConfig {
     ride_directory: string
     test_directory: string
-    testnet: {
-        env: IEnv
-    },
-    mainnet: {
-        env: IEnv
-    },
-    docker: {
-        env: IEnv,
-        image: string
-        blockTime: number,
-    },
+    envs: {
+        testnet: IEnv,
+        custom: IEnv
+    }
+    defaultEnv: string
     mocha: Mocha.MochaOptions
 }
 
-const systemConfig: IConfig = {
+export const systemConfig: IConfig = {
     ride_directory: 'ride',
     test_directory: 'test',
-    testnet: {
-        env: {
+    envs: {
+        custom: {
+            API_BASE: 'http://localhost:6869/',
+            CHAIN_ID: 'R',
+            SEED: 'waves private node seed with waves tokens',
+            timeout: 60000
+        },
+        testnet: {
             API_BASE: 'https://testnodes.wavesnodes.com/',
             CHAIN_ID: 'T',
             SEED: 'testnet seed placeholder',
             timeout: 60000
         }
     },
-    mainnet: {
-        env: {
-            API_BASE: 'https://nodes.wavesplatform.com/',
-            CHAIN_ID: 'W',
-            SEED: 'mainnet seed placeholder',
-            timeout: 60000
-        }
-    },
-    docker: {
-        env: {
-            API_BASE: 'http://localhost:6869/',
-            CHAIN_ID: 'R',
-            SEED: 'rich',
-            timeout: 60000
-        },
-        blockTime: 10000,
-        image: 'msmolyakov/waves-private-node'
-    },
+    defaultEnv: 'custom',
     mocha: {
         timeout: 60000
     }
 };
 
-class Config {
-    private oclifConfig: IOclifConfig;
 
-    private static instance: Config;
+class ConfigService {
+    oclifConfig?: IOclifConfig;
 
-    private constructor(oclifConfig: IOclifConfig) {
+    initialize(oclifConfig: IOclifConfig) {
         this.oclifConfig = oclifConfig;
+        const globalConfPath = this.getConfigPath('globalConfig');
 
-        const globalConfigFilePath = this.getConfigPath('globalConfig');
-
-        if (!fs.existsSync(globalConfigFilePath)) {
-
-            const newGlobalConfig = this.generateConfig();
-            console.log(`❗️Generated new global config
-Testnet seed="${newGlobalConfig.testnet.env.SEED}"
-Mainnet seed="${newGlobalConfig.mainnet.env.SEED}"❗`);
-            fs.writeFileSync(globalConfigFilePath, JSON.stringify(newGlobalConfig, null, 4));
+        if (!fs.existsSync(globalConfPath)) {
+            fs.writeFileSync(globalConfPath, JSON.stringify(this.generateConfig(), null, 4));
         }
-    }
-
-    public static getInstance(oclifConfig?: IOclifConfig): Config {// singleton
-        if (oclifConfig && !Config.instance) {
-            Config.instance = new Config(oclifConfig);
-        }
-
-        return Config.instance;
-    }
-
-    private generateNSeeds = (N: number) => {
-        return Array(N).fill(N).map(() => {
-            return generateMnemonic();
-        });
-    };
-
-    private generateConfig(): IConfig {
-        const [mainnetSeed, testnetSeed] = this.generateNSeeds(2);
-        const config = JSON.parse(JSON.stringify(systemConfig));
-        config.testnet.env.SEED = testnetSeed;
-        config.mainnet.env.SEED = mainnetSeed;
-        return config;
     }
 
     getConfigPath = (configName: 'globalConfig' | 'localConfig') => {
+
         const workingDirPath: string = process.cwd()!;
 
         const CONFIG_NAME_PATH_MAP: { [key: string]: string } = {
-            globalConfig: `${this.oclifConfig.root}/lib/surfboard.config.json`,
+            globalConfig: `${this.oclifConfig && this.oclifConfig.root}/lib/surfboard.config.json`,
             localConfig: `${workingDirPath}/surfboard.config.json`
         };
 
@@ -137,12 +93,19 @@ Mainnet seed="${newGlobalConfig.mainnet.env.SEED}"❗`);
         }
     };
 
+    private generateConfig(): IConfig {
+        const testnetSeed = generateMnemonic();
+        const config = JSON.parse(JSON.stringify(systemConfig));
+        config.envs.testnet.SEED = testnetSeed;
+        return config;
+    }
+
     createLocalConfigFile = () => {
         const localConfigFilePath = this.getConfigPath('localConfig');
         const config = this.generateConfig();
-        console.log(`❗️Generated new local config
-Testnet seed="${config.testnet.env.SEED}"
-Mainnet seed="${config.mainnet.env.SEED}"❗`);
+        const seed = config.envs.testnet.SEED;
+        const addr = libs.crypto.address(seed, 'T');
+        console.log(`❗️Generated new local config\nTestnet seed="${seed}"\nTestnet address="${addr}"❗`);
         fs.writeFileSync(localConfigFilePath, JSON.stringify(config, null, 4));
     };
 
@@ -163,25 +126,30 @@ Mainnet seed="${config.mainnet.env.SEED}"❗`);
     get config() {
         const nconf = new Nconf();
 
-        const globalConfigFilePath = this.getConfigPath('globalConfig');
-        const localConfigFilePath = this.getConfigPath('localConfig');
+        const globalConfPath = this.getConfigPath('globalConfig');
+        const localConfPath = this.getConfigPath('localConfig');
 
-        if (fs.existsSync(globalConfigFilePath)) {
-            nconf.defaults({type: 'file', file: globalConfigFilePath}); //global config
+        if (fs.existsSync(globalConfPath)) {
+            nconf.defaults({type: 'file', file: globalConfPath}); //global config
         } else {
             nconf.defaults({type: 'literal', store: systemConfig}); //system config
         }
 
-        if (fs.existsSync(localConfigFilePath)) {
-            nconf.defaults({type: 'file', file: localConfigFilePath}); //local config
+        if (fs.existsSync(localConfPath)) {
+            nconf.defaults({type: 'file', file: localConfPath}); //local config
         }
 
         return nconf;
     }
 }
 
-export default Config;
+const configService = new Proxy(new ConfigService(), {
+    get: (target, p) => {
+        if (p !== 'initialize' && !target.oclifConfig) {
+            throw new Error('Config service has not been initialized');
+        }
+        return (target as any)[p];
+    }
+});
 
-export {
-    systemConfig
-};
+export default configService;
