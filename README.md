@@ -1,7 +1,11 @@
-Ride-cli
+Surfboard
 =========
 
+Surfboard is a command line interface for working with RIDE programming language. Surfboard allows to compile RIDE scripts, deploy and run tests. 
 
+Surfboard requires `nodejs`. 
+
+The full manual how to use different tools for Waves dApps you can find [here](https://blog.wavesplatform.com/how-to-build-deploy-and-test-a-waves-ride-dapp-785311f58c2)
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/@waves/ride-cli.svg)](https://npmjs.org/package/@waves/ride-cli)
