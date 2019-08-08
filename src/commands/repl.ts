@@ -25,6 +25,7 @@ function print(repl: REPLServer, str: string) {
 export default class extends Command {
     async run() {
         process.stdout.write(`\x1b[1m${'Welcome to \x1b[34mRIDE\x1b[0m repl\nCompiler version ' + version}\x1b[0m\n\n`);
+        const {evaluate} = compiler();
         repl.start({
             prompt: diamond,
             eval: function (input, context, filename, cb) {
@@ -32,7 +33,7 @@ export default class extends Command {
                     this.displayPrompt();
                     return;
                 }
-                const res = compiler(input);
+                const res = evaluate(input);
                 if ('result' in res) {
                     if (typeof res.result === 'string') {
                         print(this, res.result);
