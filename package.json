@@ -23,7 +23,6 @@
     "prepublish": "npm run build",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md",
-    "recompile_file": "npm run build && node bin/run compile"
   },
   "homepage": "https://github.com/wavesplatform/surfboard",
   "keywords": [
