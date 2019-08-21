@@ -6,7 +6,6 @@ import cli from 'cli-ux';
 import url from 'url';
 import { libs } from '@waves/waves-transactions';
 import configService from '../config';
-import dockerNode from '../dockerNode';
 import { injectTestEnvironment } from './testEnv';
 
 export class TestRunner {
@@ -42,6 +41,19 @@ export class TestRunner {
 
         throw new Error(`File "${fileNameOrPath}" not found`);
     };
+
+    getLibrariesSync = () => {
+        const libsPath = path.join(process.cwd(), configService.config.get('libs_directory'));
+        if (fs.existsSync(libsPath)) {
+            return fs.readdirSync(libsPath, 'utf8')
+                .filter(name => name !== '.DS_Store')
+                .map((name) => {
+                    return ({name, content: fs.readFileSync(path.join(libsPath, name), 'utf8')});
+                });
+        }
+        return [];
+    };
+
 
     public addFile(path: string) {
         this.mocha.addFile(path);

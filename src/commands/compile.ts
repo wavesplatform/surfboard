@@ -1,6 +1,6 @@
 import { Command } from '@oclif/command';
 import cli from 'cli-ux';
-import { compile, ICompilationResult } from '@waves/ride-js';
+import { compile, ICompilationResult, scriptInfo } from '@waves/ride-js';
 import * as flags from '@oclif/command/lib/flags';
 
 import TestRunner from '../services/testRunner';
@@ -22,8 +22,16 @@ export default class Compile extends Command {
         })
     };
 
-    private compile = async (file: string): Promise<ICompilationResult> => {
-        const resultOrError = compile(file);
+    private compile = async (file: string, files?: { name: string, content: string }[]): Promise<ICompilationResult> => {
+        const info = scriptInfo(file);
+        let libraries = {};
+        if ('imports' in info && files) {
+            libraries = (files).reduce(
+                (acc: { [key: string]: string }, {name, content}) =>
+                    info.imports.includes(name) ? ({...acc, [name]: content}) : acc,
+                {});
+        }
+        const resultOrError = compile(file, libraries);
 
         if ('error' in resultOrError) {
             throw new Error(resultOrError.error);
@@ -40,15 +48,14 @@ export default class Compile extends Command {
 
         if (args.file) {
             let file;
-
             try {
                 file = testRunnerService.getContractFile(args.file);
             } catch (error) {
                 this.error(error.message);
             }
-
+            const libraries = testRunnerService.getLibrariesSync();
             if (file) {
-                this.compile(file)
+                this.compile(file, libraries)
                     .then((result: ICompilationResult) => {
                         if (flags.fullInfo) {
                             cli.styledJSON({
