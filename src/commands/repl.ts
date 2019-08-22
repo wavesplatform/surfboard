@@ -33,6 +33,8 @@ function completer(line: string) {
 }
 
 export default class extends Command {
+    static description = 'run ride repl';
+
     async run() {
         process.stdout.write(chalk.bold(`Welcome to RIDE repl\nCompiler version ${version}\n`));
         const {evaluate} = compiler();
