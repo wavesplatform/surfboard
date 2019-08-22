@@ -23,7 +23,7 @@ $ npm install -g @waves/surfboard
 $ surfboard COMMAND
 running command...
 $ surfboard (-v|--version|version)
-@waves/surfboard/1.7.0-beta.7 darwin-x64 node-v10.16.2
+@waves/surfboard/1.7.0-beta.8 darwin-x64 node-v10.16.2
 $ surfboard --help [COMMAND]
 USAGE
   $ surfboard COMMAND
@@ -55,7 +55,7 @@ OPTIONS
   --fullInfo  outputs JSON with additional info. Such as complexity, size etc.
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0-beta.7/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0-beta.8/src/commands/compile.ts)_
 
 ## `surfboard config:change KEY VALUE`
 
@@ -73,7 +73,7 @@ OPTIONS
   -g, --global  change global config
 ```
 
-_See code: [src/commands/config/change.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0-beta.7/src/commands/config/change.ts)_
+_See code: [src/commands/config/change.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0-beta.8/src/commands/config/change.ts)_
 
 ## `surfboard config:show [KEY]`
 
@@ -90,7 +90,7 @@ OPTIONS
   -g, --global  Show global config
 ```
 
-_See code: [src/commands/config/show.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0-beta.7/src/commands/config/show.ts)_
+_See code: [src/commands/config/show.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0-beta.8/src/commands/config/show.ts)_
 
 ## `surfboard help [COMMAND]`
 
@@ -118,7 +118,7 @@ USAGE
   $ surfboard init
 ```
 
-_See code: [src/commands/init.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0-beta.7/src/commands/init.ts)_
+_See code: [src/commands/init.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0-beta.8/src/commands/init.ts)_
 
 ## `surfboard repl`
 
@@ -127,7 +127,7 @@ USAGE
   $ surfboard repl
 ```
 
-_See code: [src/commands/repl.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0-beta.7/src/commands/repl.ts)_
+_See code: [src/commands/repl.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0-beta.8/src/commands/repl.ts)_
 
 ## `surfboard test [FILE]`
 
@@ -145,5 +145,5 @@ OPTIONS
   --env=env      which environment should be used for test
 ```
 
-_See code: [src/commands/test.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0-beta.7/src/commands/test.ts)_
+_See code: [src/commands/test.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0-beta.8/src/commands/test.ts)_
 <!-- commandsstop -->
