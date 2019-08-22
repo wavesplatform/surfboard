@@ -16,12 +16,13 @@ export default class Init extends Command {
         const workingDirPath = process.cwd();
         const rideDirPath = path.join(workingDirPath, configService.config.get('ride_directory'));
         const testDirPath = path.join(workingDirPath, configService.config.get('test_directory'));
+        const libsDirPath = path.join(workingDirPath, configService.config.get('libs_directory'));
 
         configService.createLocalConfigFile();
 
         fs.mkdirSync(rideDirPath, {recursive: true});
-        const rideUrl = 'https://raw.githubusercontent.com/wavesplatform/ride-examples/master/ride4dapps/wallet/ride/wallet.ride';
-        const rideFilePath = './ride/wallet.ride';
+        const rideUrl = 'https://raw.githubusercontent.com/wavesplatform/ride-examples/master/ride4dapps/wallet/ride/main.ride';
+        const rideFilePath = './ride/main.ride';
         try {
             await downloadHttps(rideUrl, rideFilePath);
         } catch (e) {
@@ -30,13 +31,13 @@ export default class Init extends Command {
 
         fs.mkdirSync(testDirPath, {recursive: true});
         const testUrl = 'https://raw.githubusercontent.com/wavesplatform/ride-examples/master/ride4dapps/wallet/test/wallet.js';
-        const testFilePath = './test/wallet.ride-test.js';
+        const testFilePath = './test/main.ride-test.js';
         try {
             await downloadHttps(testUrl, testFilePath);
         } catch (e) {
             console.error('Failed to download test example file');
         }
-
+        fs.mkdirSync(libsDirPath, {recursive: true});
         cli.action.stop();
     };
 
