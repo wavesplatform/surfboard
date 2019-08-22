@@ -21,8 +21,8 @@ export default class Init extends Command {
         configService.createLocalConfigFile();
 
         fs.mkdirSync(rideDirPath, {recursive: true});
-        const rideUrl = 'https://raw.githubusercontent.com/wavesplatform/ride-examples/master/ride4dapps/wallet/ride/main.ride';
-        const rideFilePath = './ride/main.ride';
+        const rideUrl = 'https://raw.githubusercontent.com/wavesplatform/ride-examples/master/ride4dapps/wallet/ride/wallet.ride';
+        const rideFilePath = './ride/wallet.ride';
         try {
             await downloadHttps(rideUrl, rideFilePath);
         } catch (e) {
@@ -31,7 +31,7 @@ export default class Init extends Command {
 
         fs.mkdirSync(testDirPath, {recursive: true});
         const testUrl = 'https://raw.githubusercontent.com/wavesplatform/ride-examples/master/ride4dapps/wallet/test/wallet.js';
-        const testFilePath = './test/main.ride-test.js';
+        const testFilePath = './test/wallet.ride-test.js';
         try {
             await downloadHttps(testUrl, testFilePath);
         } catch (e) {
