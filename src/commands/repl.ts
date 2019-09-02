@@ -1,5 +1,5 @@
-import repl, { REPLServer } from 'repl'
-import { repl as compiler, version, getTypes, getVarsDoc, getFunctionsDoc } from '@waves/ride-js';
+import repl, { REPLServer } from 'repl';
+import { getFunctionsDoc, getTypes, repl as compiler, version } from '@waves/ride-js';
 import { Command } from '@oclif/command';
 import chalk from 'chalk';
 
@@ -37,22 +37,28 @@ export default class extends Command {
 
     async run() {
         process.stdout.write(chalk.bold(`Welcome to RIDE repl\nCompiler version ${version}\n`));
-        const {evaluate} = compiler();
+        const {evaluate, info, totalInfo} = compiler();
         repl.start({
             prompt, completer,
             eval: function (input, context, filename, cb) {
+                let match = null;
                 if (input === '\n') {
                     this.displayPrompt();
                     return;
+                } else if ((match = input.match(/^[ \t]*\?[ \t]*([a-zA-Z0-9_-]*)[ \t]*$/m)) != null) {
+                    print(this, info(match[1]));
+                } else if ((match = input.match(/^[ \t]*\?\?[ \t]*$/m)) != null) {
+                    print(this, totalInfo());
+                } else {
+                    const res = evaluate(input);
+                    if ('result' in res) {
+                        if (typeof res.result === 'string') {
+                            print(this, res.result);
+                        } else {
+                            cb(null, res.result);
+                        }
+                    } else if ('error' in res) print(this, chalk.red(res.error));
                 }
-                const res = evaluate(input);
-                if ('result' in res) {
-                    if (typeof res.result === 'string') {
-                        print(this, res.result);
-                    } else {
-                        cb(null, res.result);
-                    }
-                } else if ('error' in res) print(this, chalk.red(res.error));
             }
         });
     }

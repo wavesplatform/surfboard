@@ -122,6 +122,8 @@ _See code: [src/commands/init.ts](https://github.com/wavesplatform/surfboard/blo
 
 ## `surfboard repl`
 
+run ride repl
+
 ```
 USAGE
   $ surfboard repl
