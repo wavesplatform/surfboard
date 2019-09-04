@@ -23,10 +23,12 @@ function print(repl: REPLServer, str: string) {
 }
 
 function completer(line: string) {
+    let match = null;
+    if ((match = line.match(/^\?[ \t]*([a-zA-Z0-9_-]*)$/m)) != null) line = match[1];
     const completions: string[] = [
         ...getTypes(3).map(({name}) => name.split('|')).reduce((acc, val) => acc.concat(val), []),
         ...getFunctionsDoc(3).map(({name}) => name)
-    ];
+    ].filter((item, i, arr) => arr.indexOf(item) === i);
 
     const hits = completions.filter((c) => c.startsWith(line));
     return [hits.length ? hits : completions, line];
@@ -41,13 +43,14 @@ export default class extends Command {
         repl.start({
             prompt, completer,
             eval: function (input, context, filename, cb) {
+                input = input.trim();
                 let match = null;
-                if (input === '\n') {
+                if (input === '') {
                     this.displayPrompt();
                     return;
-                } else if ((match = input.match(/^[ \t]*\?[ \t]*([a-zA-Z0-9_-]*)[ \t]*$/m)) != null) {
+                } else if ((match = input.match(/^\?[ \t]*([a-zA-Z0-9_-]*)$/m)) != null) {
                     print(this, info(match[1]));
-                } else if ((match = input.match(/^[ \t]*\?\?[ \t]*$/m)) != null) {
+                } else if ((match = input.match(/^\?\?$/m)) != null) {
                     print(this, totalInfo());
                 } else {
                     const res = evaluate(input);
