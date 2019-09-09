@@ -32,6 +32,7 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`surfboard check`](#surfboard-check)
 * [`surfboard compile FILE`](#surfboard-compile-file)
 * [`surfboard config:change KEY VALUE`](#surfboard-configchange-key-value)
 * [`surfboard config:show [KEY]`](#surfboard-configshow-key)
@@ -39,6 +40,17 @@ USAGE
 * [`surfboard init`](#surfboard-init)
 * [`surfboard repl`](#surfboard-repl)
 * [`surfboard test [FILE]`](#surfboard-test-file)
+
+## `surfboard check`
+
+check version
+
+```
+USAGE
+  $ surfboard check
+```
+
+_See code: [src/commands/check.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0-beta.11/src/commands/check.ts)_
 
 ## `surfboard compile FILE`
 

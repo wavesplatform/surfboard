@@ -3,7 +3,7 @@ import { getFunctionsDoc, getTypes, repl as compiler, version } from '@waves/rid
 import { Command } from '@oclif/command';
 import chalk from 'chalk';
 
-let prompt: string;
+export let prompt: string;
 switch (process.platform) {
     case 'darwin':
     case 'linux':
