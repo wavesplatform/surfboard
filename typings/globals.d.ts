@@ -14,4 +14,3 @@ declare namespace NodeJS {
 
 declare module 'recursive-readdir';
 declare module 'surfboard.config.json';
-declare module 'package.json';
