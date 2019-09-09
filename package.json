@@ -44,12 +44,15 @@
     "@waves/waves-transactions": "^3.10.3",
     "axios": "^0.19.0",
     "bip39": "^3.0.2",
+    "boxen": "^4.1.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
+    "chalk": "^2.4.2",
     "cli-ux": "^5.2.1",
     "dockerode": "^2.5.8",
     "inquirer": "^6.3.1",
     "json5": "^2.1.0",
+    "latest-version": "^5.1.0",
     "mocha": "^6.1.4",
     "nconf": "^0.10.0",
     "recursive-readdir": "^2.2.2",
@@ -88,7 +91,10 @@
   "oclif": {
     "commands": "./lib/commands",
     "hooks": {
-      "init": "./lib/hooks/init"
+      "init": [
+        "./lib/hooks/init",
+        "./lib/hooks/init/check"
+      ]
     },
     "bin": "surfboard",
     "plugins": [
