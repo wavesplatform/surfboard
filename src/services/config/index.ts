@@ -15,7 +15,7 @@ export interface IEnv {
 export interface IConfig {
     ride_directory: string
     test_directory: string
-    libs_directory: string
+    // libs_directory: string
     envs: {
         testnet: IEnv,
         custom: IEnv
@@ -26,7 +26,6 @@ export interface IConfig {
 
 export const systemConfig: IConfig = {
     ride_directory: 'ride',
-    libs_directory: 'libraries',
     test_directory: 'test',
     envs: {
         custom: {

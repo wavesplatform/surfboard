@@ -16,7 +16,7 @@ export default class Init extends Command {
         const workingDirPath = process.cwd();
         const rideDirPath = path.join(workingDirPath, configService.config.get('ride_directory'));
         const testDirPath = path.join(workingDirPath, configService.config.get('test_directory'));
-        const libsDirPath = path.join(workingDirPath, configService.config.get('libs_directory'));
+        // const libsDirPath = path.join(workingDirPath, configService.config.get('libs_directory'));
 
         configService.createLocalConfigFile();
 
@@ -37,7 +37,7 @@ export default class Init extends Command {
         } catch (e) {
             console.error('Failed to download test example file');
         }
-        fs.mkdirSync(libsDirPath, {recursive: true});
+        // fs.mkdirSync(libsDirPath, {recursive: true});
         cli.action.stop();
     };
 

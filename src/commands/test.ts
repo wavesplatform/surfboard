@@ -27,8 +27,6 @@ export default class Test extends Command {
         }),
         verbose: flags.boolean({
             char: 'v',
-            // name: 'env',
-            // default: 'custom',
             description: 'logs all transactions and node responses'
         })
     };

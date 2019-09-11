@@ -43,7 +43,7 @@ export class TestRunner {
     };
 
     getLibrariesSync = () => {
-        const libsPath = path.join(process.cwd(), configService.config.get('libs_directory'));
+        const libsPath = path.join(process.cwd());
         if (fs.existsSync(libsPath)) {
             return fs.readdirSync(libsPath, 'utf8')
                 .filter(name => name !== '.DS_Store')
