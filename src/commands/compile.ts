@@ -53,9 +53,9 @@ export default class Compile extends Command {
             } catch (error) {
                 this.error(error.message);
             }
-            const libraries = testRunnerService.getLibrariesSync();
+            // const libraries = testRunnerService.getLibrariesSync();
             if (file) {
-                this.compile(file, libraries)
+                this.compile(file)
                     .then((result: ICompilationResult) => {
                         if (flags.fullInfo) {
                             cli.styledJSON({
