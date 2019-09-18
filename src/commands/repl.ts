@@ -5,7 +5,7 @@ import { libs } from '@waves/waves-transactions';
 import chalk from 'chalk';
 import configService from '../services/config';
 
-let prompt: string;
+export let prompt: string;
 switch (process.platform) {
     case 'darwin':
     case 'linux':
