@@ -1,7 +1,9 @@
 import repl, { REPLServer } from 'repl';
 import { getFunctionsDoc, getTypes, repl as compiler, version } from '@waves/ride-js';
 import { Command } from '@oclif/command';
+import { libs } from '@waves/waves-transactions';
 import chalk from 'chalk';
+import configService from '../services/config';
 
 let prompt: string;
 switch (process.platform) {
@@ -39,7 +41,15 @@ export default class extends Command {
 
     async run() {
         process.stdout.write(chalk.bold(`Welcome to RIDE repl\nCompiler version ${version}\n`));
-        const {evaluate, info, totalInfo} = compiler();
+        const localConfig = configService.getConfig('localConfig');
+        let settings;
+        if ('stores' in localConfig) {
+            const {defaultEnv, envs} = localConfig.stores.defaults.store;
+            const {API_BASE: url, CHAIN_ID: chainId, SEED: seed} = envs[defaultEnv];
+            const address = libs.crypto.address(seed, chainId);
+            settings = {url, chainId, address};
+        }
+        const {evaluate, info, totalInfo} = compiler(/*settings*/); //todo uncomment when node`ll works fine
         repl.start({
             prompt, completer,
             eval: function (input, context, filename, cb) {
