@@ -47,12 +47,12 @@ export default class extends Command {
             const {defaultEnv, envs} = localConfig.stores.defaults.store;
             const {API_BASE: url, CHAIN_ID: chainId, SEED: seed} = envs[defaultEnv];
             const address = libs.crypto.address(seed, chainId);
-            settings = {url, chainId, address};
+            settings = [url, chainId, address];
         }
-        const {evaluate, info, totalInfo} = compiler(/*settings*/); //todo uncomment when node`ll works fine
+        const {evaluate, info, totalInfo} = settings ? compiler(...Object.values(settings)) : compiler();
         repl.start({
             prompt, completer,
-            eval: function (input, context, filename, cb) {
+            eval: async function (input, context, filename, cb) {
                 input = input.trim();
                 let match = null;
                 if (input === '') {
@@ -60,17 +60,19 @@ export default class extends Command {
                     return;
                 } else if ((match = input.match(/^\?[ \t]*([a-zA-Z0-9_-]*)$/m)) != null) {
                     print(this, info(match[1]));
-                } else if ((match = input.match(/^\?\?$/m)) != null) {
+                } else if (input.match(/^\?\?$/m) != null) {
                     print(this, totalInfo());
                 } else {
-                    const res = evaluate(input);
-                    if ('result' in res) {
-                        if (typeof res.result === 'string') {
-                            print(this, res.result);
-                        } else {
-                            cb(null, res.result);
-                        }
-                    } else if ('error' in res) print(this, chalk.red(res.error));
+                    evaluate(input)
+                        .then(res => {
+                            if ('result' in res) {
+                                if (typeof res.result === 'string') {
+                                    print(this, res.result);
+                                } else {
+                                    cb(null, res.result);
+                                }
+                            } else if ('error' in res) print(this, chalk.red(res.error));
+                        }).catch(e => print(this, chalk.red(e.toString())));
                 }
             }
         });

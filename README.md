@@ -23,7 +23,7 @@ $ npm install -g @waves/surfboard
 $ surfboard COMMAND
 running command...
 $ surfboard (-v|--version|version)
-@waves/surfboard/1.7.0-beta.11 darwin-x64 node-v10.15.1
+@waves/surfboard/1.7.0-beta.11 darwin-x64 node-v10.3.0
 $ surfboard --help [COMMAND]
 USAGE
   $ surfboard COMMAND
@@ -143,8 +143,11 @@ ARGUMENTS
   FILE  path to test file
 
 OPTIONS
-  -v, --verbose  logs all transactions and node responses
-  --env=env      which environment should be used for test
+  -v, --verbose          logs all transactions and node responses
+  --env=env              which environment should be used for test
+
+  --variables=variables  env variables can be set for usage in tests via env.{variable_name}. E.g.: MY_SEED="seed
+                         phraze",DAPP_ADDRESS="xyz"
 ```
 
 _See code: [src/commands/test.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0-beta.11/src/commands/test.ts)_
