@@ -37,7 +37,6 @@ export default class Init extends Command {
         } catch (e) {
             console.error('Failed to download test example file');
         }
-        // fs.mkdirSync(libsDirPath, {recursive: true});
         cli.action.stop();
     };
 

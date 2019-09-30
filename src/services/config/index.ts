@@ -15,7 +15,6 @@ export interface IEnv {
 export interface IConfig {
     ride_directory: string
     test_directory: string
-    // libs_directory: string
     envs: {
         testnet: IEnv,
         custom: IEnv
