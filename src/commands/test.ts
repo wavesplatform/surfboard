@@ -26,9 +26,6 @@ export default class Test extends Command {
                 'E.g.: MY_SEED="seed phraze",DAPP_ADDRESS="xyz"',
         }),
         env: flags.string({
-            // // char: 'e',
-            // name: 'env',
-            // default: 'custom',
             description: 'which environment should be used for test'
         }),
         verbose: flags.boolean({

@@ -45,11 +45,11 @@ export default class extends Command {
         let settings;
         if ('stores' in localConfig) {
             const {defaultEnv, envs} = localConfig.stores.defaults.store;
-            const {API_BASE: url, CHAIN_ID: chainId, SEED: seed} = envs[defaultEnv];
+            const {API_BASE: nodeUrl, CHAIN_ID: chainId, SEED: seed} = envs[defaultEnv];
             const address = libs.crypto.address(seed, chainId);
-            settings = [url, chainId, address];
+            settings = {nodeUrl, chainId, address};
         }
-        const {evaluate, info, totalInfo} = settings ? compiler(...Object.values(settings)) : compiler();
+        const {evaluate, info, totalInfo} = settings ? compiler(settings) : compiler();
         repl.start({
             prompt, completer,
             eval: async function (input, context, filename, cb) {

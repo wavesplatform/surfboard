@@ -16,7 +16,6 @@ export default class Init extends Command {
         const workingDirPath = process.cwd();
         const rideDirPath = path.join(workingDirPath, configService.config.get('ride_directory'));
         const testDirPath = path.join(workingDirPath, configService.config.get('test_directory'));
-        // const libsDirPath = path.join(workingDirPath, configService.config.get('libs_directory'));
 
         configService.createLocalConfigFile();
 
