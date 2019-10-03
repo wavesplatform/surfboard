@@ -36,7 +36,6 @@ export default class Init extends Command {
         } catch (e) {
             console.error('Failed to download test example file');
         }
-
         cli.action.stop();
     };
 

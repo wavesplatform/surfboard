@@ -23,7 +23,7 @@ $ npm install -g @waves/surfboard
 $ surfboard COMMAND
 running command...
 $ surfboard (-v|--version|version)
-@waves/surfboard/1.6.0 darwin-x64 node-v10.15.1
+@waves/surfboard/1.7.0 darwin-x64 node-v11.10.1
 $ surfboard --help [COMMAND]
 USAGE
   $ surfboard COMMAND
@@ -37,6 +37,7 @@ USAGE
 * [`surfboard config:show [KEY]`](#surfboard-configshow-key)
 * [`surfboard help [COMMAND]`](#surfboard-help-command)
 * [`surfboard init`](#surfboard-init)
+* [`surfboard repl`](#surfboard-repl)
 * [`surfboard test [FILE]`](#surfboard-test-file)
 
 ## `surfboard compile FILE`
@@ -54,7 +55,7 @@ OPTIONS
   --fullInfo  outputs JSON with additional info. Such as complexity, size etc.
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/wavesplatform/surfboard/blob/v1.6.0/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0/src/commands/compile.ts)_
 
 ## `surfboard config:change KEY VALUE`
 
@@ -72,7 +73,7 @@ OPTIONS
   -g, --global  change global config
 ```
 
-_See code: [src/commands/config/change.ts](https://github.com/wavesplatform/surfboard/blob/v1.6.0/src/commands/config/change.ts)_
+_See code: [src/commands/config/change.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0/src/commands/config/change.ts)_
 
 ## `surfboard config:show [KEY]`
 
@@ -89,7 +90,7 @@ OPTIONS
   -g, --global  Show global config
 ```
 
-_See code: [src/commands/config/show.ts](https://github.com/wavesplatform/surfboard/blob/v1.6.0/src/commands/config/show.ts)_
+_See code: [src/commands/config/show.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0/src/commands/config/show.ts)_
 
 ## `surfboard help [COMMAND]`
 
@@ -117,7 +118,18 @@ USAGE
   $ surfboard init
 ```
 
-_See code: [src/commands/init.ts](https://github.com/wavesplatform/surfboard/blob/v1.6.0/src/commands/init.ts)_
+_See code: [src/commands/init.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0/src/commands/init.ts)_
+
+## `surfboard repl`
+
+run ride repl
+
+```
+USAGE
+  $ surfboard repl
+```
+
+_See code: [src/commands/repl.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0/src/commands/repl.ts)_
 
 ## `surfboard test [FILE]`
 
@@ -131,9 +143,12 @@ ARGUMENTS
   FILE  path to test file
 
 OPTIONS
-  -v, --verbose  logs all transactions and node responses
-  --env=env      which environment should be used for test
+  -v, --verbose          logs all transactions and node responses
+  --env=env              which environment should be used for test
+
+  --variables=variables  env variables can be set for usage in tests via env.{variable_name}. E.g.: MY_SEED="seed
+                         phraze",DAPP_ADDRESS="xyz"
 ```
 
-_See code: [src/commands/test.ts](https://github.com/wavesplatform/surfboard/blob/v1.6.0/src/commands/test.ts)_
+_See code: [src/commands/test.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0/src/commands/test.ts)_
 <!-- commandsstop -->

@@ -40,13 +40,11 @@ export default class Compile extends Command {
 
         if (args.file) {
             let file;
-
             try {
                 file = testRunnerService.getContractFile(args.file);
             } catch (error) {
                 this.error(error.message);
             }
-
             if (file) {
                 this.compile(file)
                     .then((result: ICompilationResult) => {

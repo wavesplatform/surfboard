@@ -6,8 +6,13 @@ import cli from 'cli-ux';
 import url from 'url';
 import { libs } from '@waves/waves-transactions';
 import configService from '../config';
-import dockerNode from '../dockerNode';
 import { injectTestEnvironment } from './testEnv';
+
+export interface IRunTestOptions {
+    envName?: string,
+    verbose: boolean,
+    variables: Record<string, string>
+}
 
 export class TestRunner {
     private mocha: Mocha;
@@ -35,19 +40,31 @@ export class TestRunner {
 
         if (fs.existsSync(pathIfPath)) {
             return fs.readFileSync(pathIfPath, 'utf-8');
-        }
-        else if (fs.existsSync(pathIfFileName)) {
+        } else if (fs.existsSync(pathIfFileName)) {
             return fs.readFileSync(pathIfFileName, 'utf8');
         }
 
         throw new Error(`File "${fileNameOrPath}" not found`);
     };
 
+    getLibrariesSync = () => {
+        const libsPath = path.join(process.cwd());
+        if (fs.existsSync(libsPath)) {
+            return fs.readdirSync(libsPath, 'utf8')
+                .filter(name => name !== '.DS_Store')
+                .map((name) => {
+                    return ({name, content: fs.readFileSync(path.join(libsPath, name), 'utf8')});
+                });
+        }
+        return [];
+    };
+
+
     public addFile(path: string) {
         this.mocha.addFile(path);
     }
 
-    public async run({envName, verbose}: { envName?: string, verbose: boolean }) {
+    public async run({envName, verbose, variables}: IRunTestOptions) {
         const config = configService.config;
 
 
@@ -64,8 +81,12 @@ export class TestRunner {
         cli.log(`Starting test with "${envName}" environment\nRoot address: ${envAddress}`);
         env = {
             file: this.getContractFile,
-            ...env
+            ...env,
+            ...variables
         };
+        if (variables) {
+
+        }
 
         injectTestEnvironment(global, {verbose, env});
 
