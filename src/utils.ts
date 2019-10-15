@@ -1,5 +1,6 @@
 import https from 'https';
 import fs from 'fs';
+import { cli } from 'cli-ux';
 
 export async function downloadHttps(url: string, dest: string,) {
     const file = fs.createWriteStream(dest);
@@ -15,5 +16,16 @@ export async function downloadHttps(url: string, dest: string,) {
             reject(err);
         });
     });
+}
 
-};
+export function parseVariables(variablesStr: string) {
+    const ERROR_MSG = 'Invalid variables flag value. Should be {key}={value}. E.g.: ADDRESS="AX5FF Foo",AMOUNT=1000';
+    console.log(variablesStr)
+    return variablesStr.split(',').reduce((acc, keyValue) => {
+        const splitted = keyValue.split('=');
+        if (splitted.length !== 2 || splitted[0].length === 0 || splitted[1].length === 0) cli.error(ERROR_MSG);
+        const key = splitted[0];
+        if (typeof splitted[1] !== 'string' ) cli.error(ERROR_MSG);
+        return {...acc, [key]: splitted[1]};
+    }, {} as Record<string, string>);
+}
