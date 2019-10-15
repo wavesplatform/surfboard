@@ -10,7 +10,6 @@ import TestRunner from '../services/testRunner';
 import { parseVariables } from '../utils';
 import { cli } from 'cli-ux';
 
-const varsFlag = flags.build({});
 export default class Test extends Command {
     static description = 'run test';
 

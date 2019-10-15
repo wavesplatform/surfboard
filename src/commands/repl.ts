@@ -3,6 +3,8 @@ import { getFunctionsDoc, getTypes, repl as compiler, version } from '@waves/rid
 import { Command } from '@oclif/command';
 import { libs } from '@waves/waves-transactions';
 import chalk from 'chalk';
+import cli from 'cli-ux';
+import * as flags from '@oclif/command/lib/flags';
 import configService from '../services/config';
 
 export let prompt: string;
@@ -36,20 +38,29 @@ function completer(line: string) {
     return [hits.length ? hits : completions, line];
 }
 
-export default class extends Command {
+export default class Repl extends Command {
     static description = 'run ride repl';
 
+    static flags = {
+        env: flags.string({
+            description: 'which environment should be used for test'
+        }),
+    };
+
     async run() {
+        const { flags } = this.parse(Repl);
         process.stdout.write(chalk.bold(`Welcome to RIDE repl\nCompiler version ${version}\n`));
-        const localConfig = configService.getConfig('localConfig');
-        let settings;
-        if ('stores' in localConfig) {
-            const {defaultEnv, envs} = localConfig.stores.defaults.store;
-            const {API_BASE: nodeUrl, CHAIN_ID: chainId, SEED: seed} = envs[defaultEnv];
-            const address = libs.crypto.address(seed, chainId);
-            settings = {nodeUrl, chainId, address};
+        const conf = configService.config;
+        const envs =  conf.get('envs');
+        const defaultEnv = flags.env || conf.get('defaultEnv');
+        const env = envs[defaultEnv];
+        if (env == null){
+            cli.error(`Failed to get environment for "${defaultEnv}"\nPlease check your config or --env value`);
         }
-        const {evaluate, info, totalInfo} = settings ? compiler(settings) : compiler();
+        const {API_BASE: nodeUrl, CHAIN_ID: chainId, SEED: seed} = env;
+        const address = libs.crypto.address(seed, chainId);
+        const settings = {nodeUrl, chainId, address};
+        const {evaluate, info, totalInfo} = compiler(settings);
         repl.start({
             prompt, completer,
             eval: async function (input, context, filename, cb) {
