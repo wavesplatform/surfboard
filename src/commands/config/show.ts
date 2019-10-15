@@ -29,7 +29,7 @@ export default class Show extends Command {
         const config = configService.getConfig(configName);
 
         if ('error' in config) {
-            cli.error(config.error);
+            cli.error(config.error + '\nTry global config with -g flag?');
             return;
         }
         cli.styledHeader(configName);

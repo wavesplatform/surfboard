@@ -1,6 +1,7 @@
 import Command, { flags } from '@oclif/command';
 
 import configService from '../../services/config';
+import { cli } from 'cli-ux';
 
 export default class Change extends Command {
     static description = 'change config';

@@ -80,6 +80,10 @@ class ConfigService {
 
         const configFilePath = this.getConfigPath(configName);
 
+        if (!fs.existsSync(configFilePath)){
+            throw new Error(`Failed to get ${configName} at ${configFilePath}`);
+        }
+
         nconf.file(configName, {file: configFilePath});
 
         if (nconf.get(key)) {

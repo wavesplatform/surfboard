@@ -17,6 +17,7 @@ The full manual how to use different tools for Waves dApps you can find [here](h
 * [Commands](#commands)
 <!-- tocstop -->
 # Usage
+For all command surboard tries to use `surfboard.config.json`. If it is not present, surfboard falls back to global config. You can change global config by using `config:change` with `-g` flag 
 <!-- usage -->
 ```sh-session
 $ npm install -g @waves/surfboard
