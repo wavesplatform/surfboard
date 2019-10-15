@@ -23,7 +23,7 @@ $ npm install -g @waves/surfboard
 $ surfboard COMMAND
 running command...
 $ surfboard (-v|--version|version)
-@waves/surfboard/1.7.0 darwin-x64 node-v11.10.1
+@waves/surfboard/1.7.0 darwin-x64 node-v10.15.1
 $ surfboard --help [COMMAND]
 USAGE
   $ surfboard COMMAND
@@ -38,6 +38,7 @@ USAGE
 * [`surfboard help [COMMAND]`](#surfboard-help-command)
 * [`surfboard init`](#surfboard-init)
 * [`surfboard repl`](#surfboard-repl)
+* [`surfboard run FILE`](#surfboard-run-file)
 * [`surfboard test [FILE]`](#surfboard-test-file)
 
 ## `surfboard compile FILE`
@@ -130,6 +131,26 @@ USAGE
 ```
 
 _See code: [src/commands/repl.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0/src/commands/repl.ts)_
+
+## `surfboard run FILE`
+
+run js script with with blockchain context
+
+```
+USAGE
+  $ surfboard run FILE
+
+ARGUMENTS
+  FILE  path to script
+
+OPTIONS
+  --env=env              which environment should be used
+
+  --variables=variables  env variables can be set for usage in tests via env.{variable_name}. E.g.: MY_SEED="seed
+                         phraze",DAPP_ADDRESS="xyz"
+```
+
+_See code: [src/commands/run.ts](https://github.com/wavesplatform/surfboard/blob/v1.7.0/src/commands/run.ts)_
 
 ## `surfboard test [FILE]`
 
