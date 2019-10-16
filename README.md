@@ -17,14 +17,14 @@ The full manual how to use different tools for Waves dApps you can find [here](h
 * [Commands](#commands)
 <!-- tocstop -->
 # Usage
-For all command surboard tries to use `surfboard.config.json`. If it is not present, surfboard falls back to global config. You can change global config by using `config:change` with `-g` flag 
+For all commands surboard tries to use `surfboard.config.json`. If it is not present, surfboard falls back to global config. You can change global config by using `config:change` with `-g` flag 
 <!-- usage -->
 ```sh-session
 $ npm install -g @waves/surfboard
 $ surfboard COMMAND
 running command...
 $ surfboard (-v|--version|version)
-@waves/surfboard/1.8.0 darwin-x64 node-v10.15.1
+@waves/surfboard/1.8.1 darwin-x64 node-v10.15.1
 $ surfboard --help [COMMAND]
 USAGE
   $ surfboard COMMAND
@@ -57,7 +57,7 @@ OPTIONS
   --fullInfo  outputs JSON with additional info. Such as complexity, size etc.
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/wavesplatform/surfboard/blob/v1.8.0/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/wavesplatform/surfboard/blob/v1.8.1/src/commands/compile.ts)_
 
 ## `surfboard config:change KEY VALUE`
 
@@ -75,7 +75,7 @@ OPTIONS
   -g, --global  change global config
 ```
 
-_See code: [src/commands/config/change.ts](https://github.com/wavesplatform/surfboard/blob/v1.8.0/src/commands/config/change.ts)_
+_See code: [src/commands/config/change.ts](https://github.com/wavesplatform/surfboard/blob/v1.8.1/src/commands/config/change.ts)_
 
 ## `surfboard config:show [KEY]`
 
@@ -92,7 +92,7 @@ OPTIONS
   -g, --global  Show global config
 ```
 
-_See code: [src/commands/config/show.ts](https://github.com/wavesplatform/surfboard/blob/v1.8.0/src/commands/config/show.ts)_
+_See code: [src/commands/config/show.ts](https://github.com/wavesplatform/surfboard/blob/v1.8.1/src/commands/config/show.ts)_
 
 ## `surfboard help [COMMAND]`
 
@@ -120,7 +120,7 @@ USAGE
   $ surfboard init
 ```
 
-_See code: [src/commands/init.ts](https://github.com/wavesplatform/surfboard/blob/v1.8.0/src/commands/init.ts)_
+_See code: [src/commands/init.ts](https://github.com/wavesplatform/surfboard/blob/v1.8.1/src/commands/init.ts)_
 
 ## `surfboard repl`
 
@@ -129,9 +129,12 @@ run ride repl
 ```
 USAGE
   $ surfboard repl
+
+OPTIONS
+  --env=env  which environment should be used for test
 ```
 
-_See code: [src/commands/repl.ts](https://github.com/wavesplatform/surfboard/blob/v1.8.0/src/commands/repl.ts)_
+_See code: [src/commands/repl.ts](https://github.com/wavesplatform/surfboard/blob/v1.8.1/src/commands/repl.ts)_
 
 ## `surfboard run FILE`
 
@@ -151,7 +154,7 @@ OPTIONS
                          phraze",DAPP_ADDRESS="xyz"
 ```
 
-_See code: [src/commands/run.ts](https://github.com/wavesplatform/surfboard/blob/v1.8.0/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/wavesplatform/surfboard/blob/v1.8.1/src/commands/run.ts)_
 
 ## `surfboard test [FILE]`
 
@@ -172,5 +175,5 @@ OPTIONS
                          phraze",DAPP_ADDRESS=xyz, AMOUNT=1000
 ```
 
-_See code: [src/commands/test.ts](https://github.com/wavesplatform/surfboard/blob/v1.8.0/src/commands/test.ts)_
+_See code: [src/commands/test.ts](https://github.com/wavesplatform/surfboard/blob/v1.8.1/src/commands/test.ts)_
 <!-- commandsstop -->

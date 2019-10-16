@@ -21,10 +21,6 @@ switch (process.platform) {
         break;
 }
 
-function print(repl: REPLServer, str: string) {
-    console.log(str);
-    repl.displayPrompt();
-}
 
 function completer(line: string) {
     let match = null;
@@ -47,43 +43,79 @@ export default class Repl extends Command {
         }),
     };
 
-    async run() {
-        const { flags } = this.parse(Repl);
+    static print(replRename: REPLServer, str: string) {
+        console.log(str);
+        replRename.displayPrompt();
+    }
+
+    static welcome() {
         process.stdout.write(chalk.bold(`Welcome to RIDE repl\nCompiler version ${version}\n`));
+        process.stdout.write(chalk.gray(`You can use ?{functionName} to get docs, ?? to get full docs\n:clear to clear console, :reset to restart repl\n`));
+    }
+
+    static clear() {
+        process.stdout.write('\u001B[2J\u001B[0;0f');
+    }
+
+    async run() {
+        const {flags} = this.parse(Repl);
+        Repl.welcome();
         const conf = configService.config;
-        const envs =  conf.get('envs');
+        const envs = conf.get('envs');
         const defaultEnv = flags.env || conf.get('defaultEnv');
         const env = envs[defaultEnv];
-        if (env == null){
+        if (env == null) {
             cli.error(`Failed to get environment for "${defaultEnv}"\nPlease check your config or --env value`);
         }
         const {API_BASE: nodeUrl, CHAIN_ID: chainId, SEED: seed} = env;
         const address = libs.crypto.address(seed, chainId);
         const settings = {nodeUrl, chainId, address};
-        const {evaluate, info, totalInfo} = compiler(settings);
+        const {evaluate, info, totalInfo, clear: clearContext} = compiler(settings);
         repl.start({
             prompt, completer,
-            eval: async function (input, context, filename, cb) {
+            eval: async function (this, input, context, filename, cb) {
                 input = input.trim();
                 let match = null;
                 if (input === '') {
                     this.displayPrompt();
                     return;
-                } else if ((match = input.match(/^\?[ \t]*([a-zA-Z0-9_-]*)$/m)) != null) {
-                    print(this, info(match[1]));
-                } else if (input.match(/^\?\?$/m) != null) {
-                    print(this, totalInfo());
+                }
+                // Info: "?{functionName}"
+                else if ((match = input.match(/^\?[ \t]*([a-zA-Z0-9_-]*)$/m)) != null) {
+                    Repl.print(this, info(match[1]));
+                }
+                // FullInfo: "??"
+                else if (input.match(/^\?\?$/m) != null) {
+                    Repl.print(this, totalInfo());
+                }
+                // Custom command: ":{commandName}"
+                else if ((match = input.match(/^:([a-zA-Z0-9_-]*)$/m)) != null) {
+                    const cmd = match[1];
+                    switch (cmd) {
+                        case 'reset':
+                            Repl.clear();
+                            clearContext();
+                            Repl.welcome();
+                            this.displayPrompt();
+                            break;
+                        case 'clear':
+                            Repl.clear();
+                            this.displayPrompt();
+                            break;
+                        default:
+                            Repl.print(this, `Unknown command "${cmd}"`);
+                    }
                 } else {
                     evaluate(input)
                         .then(res => {
                             if ('result' in res) {
                                 if (typeof res.result === 'string') {
-                                    print(this, res.result);
+                                    Repl.print(this, res.result);
                                 } else {
                                     cb(null, res.result);
                                 }
-                            } else if ('error' in res) print(this, chalk.red(res.error));
-                        }).catch(e => print(this, chalk.red(e.toString())));
+                            } else if ('error' in res) Repl.print(this, chalk.red(res.error));
+                        }).catch(e => Repl.print(this, chalk.red(e.toString())));
                 }
             }
         });
