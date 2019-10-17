@@ -1,5 +1,5 @@
 import repl, { REPLServer } from 'repl';
-import { getFunctionsDoc, getTypes, repl as compiler, version } from '@waves/ride-js';
+import { getFunctionsDoc, getTypes, getVarsDoc, repl as compiler, version } from '@waves/ride-js';
 import { Command } from '@oclif/command';
 import { libs } from '@waves/waves-transactions';
 import chalk from 'chalk';
@@ -23,15 +23,16 @@ switch (process.platform) {
 
 
 function completer(line: string) {
-    let match = null;
+    let match;
     if ((match = line.match(/^\?[ \t]*([a-zA-Z0-9_-]*)$/m)) != null) line = match[1];
     const completions: string[] = [
         ...getTypes(3).map(({name}) => name.split('|')).reduce((acc, val) => acc.concat(val), []),
-        ...getFunctionsDoc(3).map(({name}) => name)
+        ...getFunctionsDoc(3).map(({name}) => name),
+        ...getVarsDoc(3).map(({name}) => name)
     ].filter((item, i, arr) => arr.indexOf(item) === i);
 
     const hits = completions.filter((c) => c.startsWith(line));
-    return [hits.length ? hits : completions, line];
+    return [hits, line];
 }
 
 export default class Repl extends Command {
