@@ -50,7 +50,8 @@ export default class Repl extends Command {
 
     static welcome() {
         process.stdout.write(chalk.bold(`Welcome to RIDE repl\nCompiler version ${version}\n`));
-        process.stdout.write(chalk.gray(`You can use ?{term} to look up a specific definition, ?? to get the full context\n:clear to clear console, :reset to restart repl\n`));
+        process.stdout.write(chalk.gray('Use ?{term} to look up a specific definition, ?? to get the full context\n' +
+            'Use :clear to clear console, :reset to restart repl, .editor to enter multiline\n'));
     }
 
     static clear() {
