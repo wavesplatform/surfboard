@@ -22,7 +22,9 @@ switch (process.platform) {
 }
 
 const infoData: { [key: string]: string } = {
-    'FOLD': 'FOLD<limit>(list, acc, reducer)\nlist - list of values\nacc - accumulator\nreducer - func (acc: Int, p: AttachedPayment): newAcc'
+    'FOLD': 'list : List[A] - list of values\n' +
+        'acc : B - accumulator\n' +
+        'foldFunc: func(acc:B, value: A) : B - folding function, takes values from list one by one'
 };
 
 function completer(line: string) {
