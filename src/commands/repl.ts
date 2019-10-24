@@ -21,6 +21,9 @@ switch (process.platform) {
         break;
 }
 
+const infoData: { [key: string]: string } = {
+    'FOLD': 'FOLD<limit>(list, acc, reducer)\nlist - list of values\nacc - accumulator\nreducer - func (acc: Int, p: AttachedPayment): newAcc'
+};
 
 function completer(line: string) {
     let match;
@@ -84,7 +87,7 @@ export default class Repl extends Command {
                 }
                 // Info: "?{functionName}"
                 else if ((match = input.match(/^\?[ \t]*([a-zA-Z0-9_-]*)$/m)) != null) {
-                    Repl.print(this, info(match[1]));
+                    Repl.print(this, infoData[match[1]] ? infoData[match[1]] : info(match[1]));
                 }
                 // FullInfo: "??"
                 else if (input.match(/^\?\?$/m) != null) {
