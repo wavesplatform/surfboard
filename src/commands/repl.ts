@@ -21,6 +21,11 @@ switch (process.platform) {
         break;
 }
 
+const infoData: { [key: string]: string } = {
+    'FOLD': 'list : List[A] - list of values\n' +
+        'acc : B - accumulator\n' +
+        'foldFunc: func(acc:B, value: A) : B - folding function, takes values from list one by one'
+};
 
 function completer(line: string) {
     let match;
@@ -84,7 +89,7 @@ export default class Repl extends Command {
                 }
                 // Info: "?{functionName}"
                 else if ((match = input.match(/^\?[ \t]*([a-zA-Z0-9_-]*)$/m)) != null) {
-                    Repl.print(this, info(match[1]));
+                    Repl.print(this, infoData[match[1]] ? infoData[match[1]] : info(match[1]));
                 }
                 // FullInfo: "??"
                 else if (input.match(/^\?\?$/m) != null) {
