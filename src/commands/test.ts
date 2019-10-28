@@ -5,10 +5,9 @@ import * as path from 'path';
 import { Command } from '@oclif/command';
 import * as flags from '@oclif/command/lib/flags';
 
-import configService, { systemConfig } from '../services/config';
+import configService from '../services/config';
 import TestRunner from '../services/testRunner';
 import { parseVariables } from '../utils';
-import { cli } from 'cli-ux';
 
 export default class Test extends Command {
     static description = 'run test';

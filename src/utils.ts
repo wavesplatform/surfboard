@@ -1,6 +1,8 @@
 import https from 'https';
 import fs from 'fs';
 import { cli } from 'cli-ux';
+import * as path from "path";
+import configService from './services/config';
 
 export async function downloadHttps(url: string, dest: string,) {
     const file = fs.createWriteStream(dest);
@@ -29,3 +31,16 @@ export function parseVariables(variablesStr: string) {
         return {...acc, [key]: splitted[1]};
     }, {} as Record<string, string>);
 }
+
+export function getFileContent(fileNameOrPath: string) {
+    const pathIfFileName = path.join(process.cwd(), configService.config.get('ride_directory'), fileNameOrPath);
+    const pathIfPath = path.resolve(process.cwd(), fileNameOrPath);
+
+    if (fs.existsSync(pathIfPath)) {
+        return fs.readFileSync(pathIfPath, 'utf-8');
+    } else if (fs.existsSync(pathIfFileName)) {
+        return fs.readFileSync(pathIfFileName, 'utf8');
+    }
+
+    throw new Error(`File "${fileNameOrPath}" not found`);
+};

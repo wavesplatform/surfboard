@@ -4,7 +4,7 @@ import * as flags from '@oclif/command/lib/flags';
 import { addEnvFunctionsToGlobal } from '@waves/js-test-env';
 import configService from '../services/config';
 
-import { parseVariables } from '../utils';
+import { getFileContent, parseVariables } from '../utils';
 
 export default class Run extends Command {
     static description = 'run js script with with blockchain context';
@@ -36,7 +36,9 @@ export default class Run extends Command {
 
         // setup environment
         addEnvFunctionsToGlobal(global);
-        (global as any).env = {};
+        (global as any).env = {
+            file: getFileContent
+        };
         Object.assign(global.env, configEnv, variables);
 
         // Run script via requiring it

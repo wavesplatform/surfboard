@@ -7,6 +7,7 @@ import url from 'url';
 import { libs } from '@waves/waves-transactions';
 import configService from '../config';
 import { injectTestEnvironment } from './testEnv';
+import { getFileContent } from '../../utils';
 
 export interface IRunTestOptions {
     envName?: string,
@@ -33,19 +34,6 @@ export class TestRunner {
 
         return TestRunner.instance;
     }
-
-    getContractFile = (fileNameOrPath: string) => {
-        const pathIfFileName = path.join(process.cwd(), configService.config.get('ride_directory'), fileNameOrPath);
-        const pathIfPath = path.resolve(process.cwd(), fileNameOrPath);
-
-        if (fs.existsSync(pathIfPath)) {
-            return fs.readFileSync(pathIfPath, 'utf-8');
-        } else if (fs.existsSync(pathIfFileName)) {
-            return fs.readFileSync(pathIfFileName, 'utf8');
-        }
-
-        throw new Error(`File "${fileNameOrPath}" not found`);
-    };
 
     getLibrariesSync = () => {
         const libsPath = path.join(process.cwd());
@@ -80,7 +68,7 @@ export class TestRunner {
 
         cli.log(`Starting test with "${envName}" environment\nRoot address: ${envAddress}`);
         env = {
-            file: this.getContractFile,
+            file: getFileContent,
             ...env,
             ...variables
         };
