@@ -3,7 +3,7 @@ import cli from 'cli-ux';
 import { compile, ICompilationResult } from '@waves/ride-js';
 import * as flags from '@oclif/command/lib/flags';
 
-import TestRunner from '../services/testRunner';
+import { getFileContent } from '../utils';
 
 export default class Compile extends Command {
     static description = 'compile ride file';
@@ -36,12 +36,10 @@ export default class Compile extends Command {
         const {args} = this.parse(Compile);
         const {flags} = this.parse(Compile);
 
-        const testRunnerService = TestRunner.getInstance();
-
         if (args.file) {
             let file;
             try {
-                file = testRunnerService.getContractFile(args.file);
+                file = getFileContent(args.file);
             } catch (error) {
                 this.error(error.message);
             }
