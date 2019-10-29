@@ -3,7 +3,7 @@ import chaiAsPromised from 'chai-as-promised';
 import cli from 'cli-ux';
 import axios from 'axios';
 import { libs } from '@waves/waves-transactions';
-import augment, { TSetupAccountsFunc } from '@waves/js-test-env/dist/augment';
+import augment, { TSetupAccountsFunc } from '@waves/js-test-env/augment';
 import { NETWORKS } from '../../constants';
 
 chai.use(chaiAsPromised);
