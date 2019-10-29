@@ -41,13 +41,14 @@ const setupAccountsWrapper: (x: TSetupAccountsFunc) => TSetupAccountsFunc = f =>
     const network = Object.values(NETWORKS).find(n => n.chainId === global.env.CHAIN_ID);
     if (network) {
         if ((network === NETWORKS.PRIVATE && !(await checkOnlineUrl(network.explorer)))) {
-            cli.log('\nFailed to get local explorer\nPlease make sure explorer is running\n' +
-                'You can get it here: https://hub.docker.com/r/wavesplatform/explorer\n');
+            cli.log('\nFailed to get local explorer\nExecute this:\n' +
+                'docker run -d -e API_NODE_URL=http://localhost:6869 -e NODE_LIST=http://localhost:6869 -p 3000:8080 wavesplatform/explorer\n');
         } else {
             cli.log('\nExplorer links');
             Object.entries(accs).forEach(([name, seed]) =>
                 cli.log(`${name}: ${network.explorer}/address/${libs.crypto.address(seed, network.chainId)}`));
             cli.log('\n');
+
         }
     }
     return accs;
