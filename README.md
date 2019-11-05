@@ -16,6 +16,9 @@ The full manual how to use different tools for Waves dApps you can find [here](h
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
+# Installation
+Surfboard is distributed as npm package. To install run `npm i -g @waves/surfboard`
+
 # Usage
 For all commands surboard tries to use `surfboard.config.json`. If it is not present, surfboard falls back to global config. You can change global config by using `config:change` with `-g` flag 
 <!-- usage -->
