@@ -13,6 +13,7 @@ The full manual how to use different tools for Waves dApps you can find [here](h
 [![License](https://img.shields.io/npm/l/@waves/ride-cli.svg)](https://github.com/wavesplatform/ride-cli/blob/master/package.json)
 
 <!-- toc -->
+* [Installation](#installation)
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->

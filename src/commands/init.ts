@@ -6,6 +6,7 @@ import cli from 'cli-ux';
 import { downloadHttps } from '../utils';
 
 import configService from '../services/config';
+import { deployScriptSample } from '../examples';
 
 export default class Init extends Command {
     static description = 'initialize new Ride project';
@@ -16,12 +17,13 @@ export default class Init extends Command {
         const workingDirPath = process.cwd();
         const rideDirPath = path.join(workingDirPath, configService.config.get('ride_directory'));
         const testDirPath = path.join(workingDirPath, configService.config.get('test_directory'));
+        const scriptsDirPath = path.join(workingDirPath, 'scripts');
 
         configService.createLocalConfigFile();
 
         fs.mkdirSync(rideDirPath, {recursive: true});
         const rideUrl = 'https://raw.githubusercontent.com/wavesplatform/ride-examples/master/ride4dapps/wallet/ride/wallet.ride';
-        const rideFilePath = './ride/wallet.ride';
+        const rideFilePath = path.join(rideDirPath, 'wallet.ride');
         try {
             await downloadHttps(rideUrl, rideFilePath);
         } catch (e) {
@@ -30,13 +32,17 @@ export default class Init extends Command {
 
         fs.mkdirSync(testDirPath, {recursive: true});
         const testUrl = 'https://raw.githubusercontent.com/wavesplatform/ride-examples/master/ride4dapps/wallet/test/wallet.js';
-        const testFilePath = './test/wallet.ride-test.js';
+        const testFilePath = path.join(testDirPath, 'wallet.ride-test.js');
         try {
             await downloadHttps(testUrl, testFilePath);
         } catch (e) {
             console.error('Failed to download test example file');
         }
+
+        fs.mkdirSync(scriptsDirPath, {recursive: true});
         cli.action.stop();
+        const deployFilePath = path.join(scriptsDirPath, 'wallet.deploy.js');
+        fs.writeFileSync(deployFilePath, deployScriptSample)
     };
 
     run = async () => {
@@ -67,3 +73,4 @@ export default class Init extends Command {
         }
     };
 }
+

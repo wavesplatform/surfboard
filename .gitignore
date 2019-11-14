@@ -88,9 +88,10 @@ temp
 /yarn.lock
 node_modules
 *.tsbuildinfo
-.editorconfig 
+.editorconfig
 .travis.yml
 
 ride
 test
 surfboard.config.json
+scripts

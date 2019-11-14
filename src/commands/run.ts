@@ -32,7 +32,7 @@ export default class Run extends Command {
         const scriptPath = path.resolve(process.cwd(), args.file);
         const config = configService.config;
         const variables = flags.variables == null ? {} : parseVariables(flags.variables);
-        let configEnv = config.get('envs:' + flags.env || 'defaultEnv');
+        let configEnv = config.get('envs:' + (flags.env ||  config.get('defaultEnv')));
 
         // setup environment
 
