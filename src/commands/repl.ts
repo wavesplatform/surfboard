@@ -21,15 +21,14 @@ switch (process.platform) {
         break;
 }
 
-const infoData: { [key: string]: string } = {
-    'FOLD': 'list : List[A] - list of values\n' +
-        'acc : B - accumulator\n' +
-        'foldFunc: func(acc:B, value: A) : B - folding function, takes values from list one by one'
-};
+const infoData: { [key: string]: string } = Object.create(null);
+infoData['FOLD'] = 'list : List[A] - list of values\n' +
+    'acc : B - accumulator\n' +
+    'foldFunc: func(acc:B, value: A) : B - folding function, takes values from list one by one';
 
 function completer(line: string) {
     let match;
-    if ((match = line.match(/^\?[ \t]*([a-zA-Z0-9_-]*)$/m)) != null) line = match[1];
+    if ((match = line.match(/^\?[ \t]*([a-zA-Z0-9_\-/=%!><]*)$/m)) != null) line = match[1];
     const completions: string[] = [
         ...getTypes(3).map(({name}) => name.split('|')).reduce((acc, val) => acc.concat(val), []),
         ...getFunctionsDoc(3).map(({name}) => name),
@@ -88,7 +87,7 @@ export default class Repl extends Command {
                     return;
                 }
                 // Info: "?{functionName}"
-                else if ((match = input.match(/^\?[ \t]*([a-zA-Z0-9_-]*)$/m)) != null) {
+                else if ((match = input.match(/^\?[ \t]*([a-zA-Z0-9_\+=/><-]*)$/m)) != null) {
                     Repl.print(this, infoData[match[1]] ? infoData[match[1]] : info(match[1]));
                 }
                 // FullInfo: "??"
