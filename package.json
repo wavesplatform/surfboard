@@ -22,7 +22,8 @@
     "build": "npm run prepack && npm run postpack",
     "prepublish": "npm run build",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif-dev readme && git add README.md"
+    "version": "oclif-dev readme && git add README.md",
+    "postversion": "git push --tags"
   },
   "homepage": "https://github.com/wavesplatform/surfboard",
   "keywords": [
