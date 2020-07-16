@@ -28,7 +28,7 @@ $ npm install -g @waves/surfboard
 $ surfboard COMMAND
 running command...
 $ surfboard (-v|--version|version)
-@waves/surfboard/1.11.9-beta.2 darwin-x64 node-v13.11.0
+@waves/surfboard/1.11.9-beta.2 darwin-x64 node-v10.21.0
 $ surfboard --help [COMMAND]
 USAGE
   $ surfboard COMMAND

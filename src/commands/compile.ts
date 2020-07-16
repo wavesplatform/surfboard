@@ -23,7 +23,7 @@ export default class Compile extends Command {
     };
 
     private compile = async (file: string): Promise<ICompilationResult> => {
-        const resultOrError = compile(file);
+        const resultOrError = compile(file, 3);
 
         if ('error' in resultOrError) {
             throw new Error(resultOrError.error);
