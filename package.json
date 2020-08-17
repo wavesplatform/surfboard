@@ -1,6 +1,6 @@
 {
   "name": "@waves/surfboard",
-  "version": "2.0.0-beta.3",
+  "version": "2.0.0-beta.4",
   "author": {
     "name": "wavesplatform"
   },
@@ -18,7 +18,7 @@
   "scripts": {
     "postpack": "rm -f oclif.manifest.json && rm -f tsconfigtsbuildinfo",
     "posttest": "tslint -p test -t stylish",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "prepack": "rm -rf lib/* && tsc -b && oclif-dev manifest && oclif-dev readme",
     "build": "npm run prepack && npm run postpack",
     "prepublish": "npm run build",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
