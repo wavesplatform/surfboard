@@ -83,7 +83,8 @@ temp
 *-error.log
 /.nyc_output
 /dist
-/lib
+/lib/*
+!/lib/.keep
 /tmp
 /yarn.lock
 node_modules

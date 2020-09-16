@@ -30,9 +30,9 @@ function completer(line: string) {
     let match;
     if ((match = line.match(/^\?[ \t]*([a-zA-Z0-9_\-/=%!><]*)$/m)) != null) line = match[1];
     const completions: string[] = [
-        ...getTypes(3).map(({name}) => name.split('|')).reduce((acc, val) => acc.concat(val), []),
-        ...getFunctionsDoc(3).map(({name}) => name),
-        ...getVarsDoc(3).map(({name}) => name)
+        ...getTypes(4).map(({name}) => name.split('|')).reduce((acc, val) => acc.concat(val), []),
+        ...getFunctionsDoc(4).map(({name}) => name),
+        ...getVarsDoc(4).map(({name}) => name)
     ].filter((item, i, arr) => arr.indexOf(item) === i);
 
     const hits = completions.filter((c) => c.startsWith(line));
