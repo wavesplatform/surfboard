@@ -35,6 +35,9 @@
   "bin": {
     "surfboard": "./bin/run"
   },
+  "config": {
+    "update-notifier": false
+  },
   "bugs": "https://github.com/wavesplatform/surfboard/issues",
   "dependencies": {
     "@oclif/command": "^1.5.13",
