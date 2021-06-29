@@ -1,6 +1,6 @@
 {
   "name": "@waves/surfboard",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "author": {
     "name": "wavesplatform"
   },
@@ -23,7 +23,8 @@
     "build": "npm run compile && npm run prepack && npm run postpack",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md",
-    "postversion": "git push --tags"
+    "postversion": "git push --tags",
+    "prepublishOnly": "npm run build"
   },
   "homepage": "https://github.com/wavesplatform/surfboard",
   "keywords": [
