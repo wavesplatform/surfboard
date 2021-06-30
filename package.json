@@ -1,6 +1,6 @@
 {
   "name": "@waves/surfboard",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "author": {
     "name": "wavesplatform"
   },
@@ -16,7 +16,7 @@
   ],
   "repository": "https://github.com/wavesplatform/surfboard",
   "scripts": {
-    "postpack": "rm -f oclif.manifest.json && rm -f tsconfigtsbuildinfo",
+    "postpack": "rm -f oclif.manifest.json && rm -f tsconfig.tsbuildinfo",
     "posttest": "tslint -p test -t stylish",
     "prepack": "oclif-dev manifest && oclif-dev readme",
     "compile": "rm -rf lib/* && tsc -b",
