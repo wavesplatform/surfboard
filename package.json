@@ -1,6 +1,6 @@
 {
   "name": "@waves/surfboard",
-  "version": "2.2.2",
+  "version": "2.2.4",
   "author": {
     "name": "wavesplatform"
   },
@@ -42,7 +42,7 @@
     "@oclif/config": "1.13.0",
     "@oclif/plugin-help": "^2.1.6",
     "@waves/js-test-env": "^1.1.4",
-    "@waves/ride-js": "^2.1.1",
+    "@waves/ride-js": "^2.1.8",
     "@waves/waves-transactions": "^4.2.1",
     "axios": "^0.19.0",
     "bip39": "^3.0.2",
