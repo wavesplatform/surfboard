@@ -37,7 +37,7 @@ export default class Compile extends Command {
         let libs = {} as Record<string, string>;
         imports.forEach(path => libs[path] = getLibContent(filePath, path))
 
-        const resultOrError = compile(file, 3, libs);
+        const resultOrError = compile(file, 3, undefined, undefined, libs);
 
         if ('error' in resultOrError) {
             throw new Error(resultOrError.error);
