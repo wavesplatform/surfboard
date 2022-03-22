@@ -1,6 +1,6 @@
 {
   "name": "@waves/surfboard",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "author": {
     "name": "wavesplatform"
   },
@@ -35,9 +35,6 @@
   ],
   "bin": {
     "surfboard": "./bin/run"
-  },
-  "config": {
-    "update-notifier": false
   },
   "bugs": "https://github.com/wavesplatform/surfboard/issues",
   "dependencies": {
