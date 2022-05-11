@@ -44,3 +44,8 @@ export function getFileContent(fileNameOrPath: string) {
 
     throw new Error(`File "${fileNameOrPath}" not found`);
 };
+
+export function getLibContent(filePath: string, libPath: string) {
+    const fileNameOrPath = path.normalize(filePath+'/../'+libPath)
+    return getFileContent(fileNameOrPath)
+};
