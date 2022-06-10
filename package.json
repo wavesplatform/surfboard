@@ -57,7 +57,7 @@
     "latest-version": "^5.1.0",
     "long": "^4.0.0",
     "mocha": "^6.1.4",
-    "nconf": "^0.10.0",
+    "nconf": "^0.11.4",
     "recursive-readdir": "^2.2.2",
     "tslib": "^1.9.3"
   },
