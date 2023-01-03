@@ -53,7 +53,7 @@
     "cli-ux": "^5.2.1",
     "dockerode": "^2.5.8",
     "inquirer": "^6.3.1",
-    "json5": "^2.1.0",
+    "json5": "^2.2.2",
     "latest-version": "^5.1.0",
     "long": "^4.0.0",
     "mocha": "^6.1.4",
