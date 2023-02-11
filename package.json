@@ -54,7 +54,7 @@
     "dockerode": "^2.5.8",
     "inquirer": "^6.3.1",
     "json5": "^2.1.0",
-    "latest-version": "^5.1.0",
+    "latest-version": "^7.0.0",
     "long": "^4.0.0",
     "mocha": "^6.1.4",
     "nconf": "^0.10.0",
